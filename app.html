@@ -589,8 +589,16 @@ let isAdmin = false, adminPass = sessionStorage.getItem('igx_pass') || '';
 let lastHash = '';
 
 // ════════════════════════════════════════════════
-// CONSTANTS & HELPERS (layout, filters, render)
+// CONSTANTS
 // ════════════════════════════════════════════════
+const QUARTER_LABELS = {Q1:'Januari — Maret',Q2:'April — Juni',Q3:'Juli — September',Q4:'Oktober — Desember'};
+const MONTHS_ORDER   = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'];
+const MONTHS_FULL    = {JAN:'Januari',FEB:'Februari',MAR:'Maret',APR:'April',MEI:'Mei',JUN:'Juni',JUL:'Juli',AGS:'Agustus',SEPT:'September',OKT:'Oktober',NOV:'November',DES:'Desember'};
+const CAT_CLASS      = {BOP:'bop','SPECIAL MONDAY':'','ROAD TO IDEASCAPE':'trip','LEADERS MEETING':'','TRIP':'trip','OUTING':'','CORE':'core','ROAD TO AAB':'','MAJOR EVENT':'major','SUMMIT':'summit','SPORT':''};
+const MONTH_OPTS     = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'];
+const MONTH_FULL_MAP = {JAN:'Januari',FEB:'Februari',MAR:'Maret',APR:'April',MEI:'Mei',JUN:'Juni',JUL:'Juli',AGS:'Agustus',SEPT:'September',OKT:'Oktober',NOV:'November',DES:'Desember'};
+const CAT_OPTS       = ['BOP','SPECIAL MONDAY','ROAD TO IDEASCAPE','LEADERS MEETING','TRIP','OUTING','CORE','ROAD TO AAB','MAJOR EVENT','SUMMIT','SPORT'];
+
 // ═══════════════════════════ FILTER ═══════════════════════════
 function setFilter(type, val, el) {
   if(type==='q') { filterQ=val; document.querySelectorAll('[id^="fq-"]').forEach(b=>b.classList.remove('active')); el.classList.add('active'); }
@@ -877,10 +885,6 @@ async function setGroup(val) {
   await saveEvents(); buildModal(); render();
 }
 
-const MONTH_OPTS = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'];
-const MONTH_FULL_MAP = {JAN:'Januari',FEB:'Februari',MAR:'Maret',APR:'April',MEI:'Mei',JUN:'Juni',JUL:'Juli',AGS:'Agustus',SEPT:'September',OKT:'Oktober',NOV:'November',DES:'Desember'};
-const CAT_OPTS = ['BOP','SPECIAL MONDAY','ROAD TO IDEASCAPE','LEADERS MEETING','TRIP','OUTING','CORE','ROAD TO AAB','MAJOR EVENT','SUMMIT','SPORT'];
-
 function dateToMeta(dateStr) {
   if(!dateStr) return {q:'Q1',month:'JAN',dateDisplay:'',monthFull:'Januari'};
   const d = new Date(dateStr + 'T00:00:00');
@@ -1066,17 +1070,7 @@ async function loadEvents() {
     events.forEach(e => { e.group='—'; e.momentum=''; });
     showToast('Mode offline — menampilkan data default');
   }
-  try {
-    render();
-  } catch(e) {
-    console.error('render error:', e);
-    const c = document.getElementById('eventsContainer');
-    if (c) c.innerHTML = `<div style="padding:40px;color:red;font-family:monospace;font-size:12px">
-      <b>Render Error:</b><br>${e.message}<br><br>
-      Events loaded: ${events.length}<br>
-      <pre>${e.stack ? e.stack.slice(0,400) : ''}</pre>
-    </div>`;
-  }
+  render();
   document.getElementById('loadingWrap').classList.remove('show');
   document.getElementById('loadingWrap').style.display = 'none';
   setSyncDot('saved');
