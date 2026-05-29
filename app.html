@@ -347,8 +347,8 @@ body.is-admin .admin-only { display:inline-flex !important; }
     <div class="modal-body" id="mBody"></div>
     <div class="modal-ftr">
       <div class="mftr-l">
-        <button class="mbtn mbtn-done" id="btnMarkDone" onclick="markDone()" style="display:none" class="mbtn mbtn-done admin-only">Tandai Done</button>
-        <button class="mbtn mbtn-delete" id="btnDelete" onclick="deleteEvent()" style="display:none" class="mbtn mbtn-delete admin-only">Hapus</button>
+        <button class="mbtn mbtn-done" id="btnMarkDone" onclick="markDone()" style="display:none">Tandai Done</button>
+        <button class="mbtn mbtn-delete" id="btnDelete" onclick="deleteEvent()" style="display:none">Hapus</button>
       </div>
       <div class="mftr-r">
         <button class="mbtn mbtn-ghost" onclick="closeModal()">Tutup</button>
@@ -791,11 +791,11 @@ function buildModal() {
     ${e.pic!=='—'?`<span class="mtag">PIC: ${e.pic}</span>`:''}
     <span class="mtag">${e.q}</span>
     <span class="gbadge ${groupBadgeClass(grp)}" style="font-size:10px;padding:4px 12px">${grp==='—'?'Belum Ditandai':grp}</span>`;
-  document.getElementById('btnMarkDone').style.display = e.status==='Upcoming' ? 'block' : 'none';
-  document.getElementById('btnDelete').style.display = 'block';
-  document.getElementById('btnEdit').style.display = 'block';
+  document.getElementById('btnMarkDone').style.display = (isAdmin && e.status==='Upcoming') ? 'inline-flex' : 'none';
+  document.getElementById('btnDelete').style.display   = isAdmin ? 'inline-flex' : 'none';
+  document.getElementById('btnEdit').style.display     = isAdmin ? 'inline-flex' : 'none';
   document.getElementById('btnEdit').textContent = isEditing ? 'Batal' : 'Edit';
-  document.getElementById('btnSave').style.display = isEditing ? 'block' : 'none';
+  document.getElementById('btnSave').style.display = (isAdmin && isEditing) ? 'inline-flex' : 'none';
   document.getElementById('btnSave').textContent = 'Simpan';
   isEditing ? buildEditForm() : buildViewBody();
 }
@@ -803,18 +803,29 @@ function buildModal() {
 function buildViewBody() {
   const e = curEvent;
   const grp = e.group || '—';
+
+  // Group row: dropdown for admin, read-only badge for viewer
+  const groupRow = isAdmin
+    ? `<div class="group-assign">
+        <span class="group-assign-label">Kelompok Acara</span>
+        <select class="group-sel" onchange="setGroup(this.value)">
+          <option value="—"${grp==='—'?' selected':''}>— Belum Ditandai</option>
+          <option value="Ignite"${grp==='Ignite'?' selected':''}>🔴 Ignite</option>
+          <option value="Connect"${grp==='Connect'?' selected':''}>⚫ Connect</option>
+        </select>
+      </div>`
+    : (grp !== '—' ? `<div style="margin-bottom:14px"><span class="gbadge ${groupBadgeClass(grp)}" style="font-size:11px;padding:5px 14px">${grp}</span></div>` : '');
+
+  // Momentum: editable for admin, read-only text for viewer
+  const momentumRow = isAdmin
+    ? `<div class="m-sec">Momentum Pengumuman</div>
+       <textarea class="momentum-ta" id="momentumInput" placeholder="Tulis momentum / pengumuman penting untuk event ini..." onblur="saveMomentum(this.value)">${e.momentum||''}</textarea>
+       <div class="momentum-hint">Teks ini langsung tampil di card depan saat diisi. Klik di luar kotak untuk menyimpan.</div>`
+    : (e.momentum ? `<div class="m-sec">Momentum Pengumuman</div><div class="m-note" style="margin-bottom:18px">📢 ${e.momentum}</div>` : '');
+
   document.getElementById('mBody').innerHTML = `
-    <div class="group-assign">
-      <span class="group-assign-label">Kelompok Acara</span>
-      <select class="group-sel" onchange="setGroup(this.value)">
-        <option value="—"${grp==='—'?' selected':''}>— Belum Ditandai</option>
-        <option value="Ignite"${grp==='Ignite'?' selected':''}>🔴 Ignite</option>
-        <option value="Connect"${grp==='Connect'?' selected':''}>⚫ Connect</option>
-      </select>
-    </div>
-    <div class="m-sec">Momentum Pengumuman</div>
-    <textarea class="momentum-ta" id="momentumInput" placeholder="Tulis momentum / pengumuman penting untuk event ini..." onblur="saveMomentum(this.value)">${e.momentum||''}</textarea>
-    <div class="momentum-hint">Teks ini langsung tampil di card depan saat diisi. Klik di luar kotak untuk menyimpan.</div>
+    ${groupRow}
+    ${momentumRow}
     <div class="m-sec">Deskripsi</div>
     <div class="m-desc">${e.desc}</div>
     <div class="m-sec">Agenda</div>
@@ -1186,24 +1197,6 @@ function setSyncDot(state) {
   if (state === 'saved') setTimeout(() => { if(dot.classList.contains('saved')) dot.className='sync-dot'; }, 3000);
 }
 
-// ════════════════════════════════════════════════
-// buildModal: show/hide admin-only buttons
-// ════════════════════════════════════════════════
-// Override buildModal to gate admin buttons
-const _origBuildModal = buildModal;
-function buildModal() {
-  _origBuildModal();
-  // Show edit/delete/done only for admin (non-create mode)
-  if (!isCreating) {
-    document.getElementById('btnEdit').style.display = isAdmin ? 'inline-flex' : 'none';
-    const btnDone = document.getElementById('btnMarkDone');
-    const btnDel  = document.getElementById('btnDelete');
-    if (isAdmin && curEvent && curEvent.status === 'Upcoming') btnDone.style.display = 'inline-flex';
-    else btnDone.style.display = 'none';
-    if (isAdmin) btnDel.style.display = 'inline-flex';
-    else btnDel.style.display = 'none';
-  }
-}
 
 </script>
 </body>
