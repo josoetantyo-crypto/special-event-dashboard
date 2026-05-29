@@ -1050,15 +1050,25 @@ async function loadEvents() {
   document.getElementById('loadingWrap').classList.add('show');
   try {
     const res = await fetch('/api/events?t=' + Date.now());
-    if (!res.ok) throw new Error();
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
-    if (Array.isArray(data)) {
+    if (Array.isArray(data) && data.length > 0) {
       events = data;
       events.forEach(e => { if(!e.group) e.group='—'; if(e.momentum===undefined) e.momentum=''; });
       lastHash = quickHash();
-      render();
+    } else {
+      // API returned empty — fallback to DEFAULT
+      events = JSON.parse(JSON.stringify(DEFAULT));
+      events.forEach(e => { e.group='—'; e.momentum=''; });
     }
-  } catch(_) { showToast('Gagal memuat data'); }
+  } catch(err) {
+    console.error('loadEvents error:', err);
+    // Network/parse error — fallback to DEFAULT so page is never blank
+    events = JSON.parse(JSON.stringify(DEFAULT));
+    events.forEach(e => { e.group='—'; e.momentum=''; });
+    showToast('Mode offline — menampilkan data default');
+  }
+  render();
   document.getElementById('loadingWrap').classList.remove('show');
   setSyncDot('saved');
 }
