@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 SPECIAL EVENT — IgniteX</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+:root {
+  --white: #FFFFFF;
+  --black: #0A0A0A;
+  --red: #D40000;
+  --red-hover: #FF0000;
+  --gray-50: #FAFAFA;
+  --gray-100: #F4F4F4;
+  --gray-200: #E8E8E8;
+  --gray-300: #D0D0D0;
+  --gray-400: #A0A0A0;
+  --gray-600: #666666;
+  --done-border: #D0D0D0;
+  --done-text: #999999;
+  --done-bg: #F8F8F8;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',system-ui,sans-serif; background:var(--white); color:var(--black); min-height:100vh; }
+
+/* ═══ HEADER ═══ */
+header { background:var(--black); position:sticky; top:0; z-index:100; }
+.header-inner { max-width:1440px; margin:0 auto; padding:0 32px; display:flex; align-items:center; justify-content:space-between; height:72px; gap:20px; }
+.brand { display:flex; align-items:center; gap:14px; }
+.brand-mark { background:var(--red); color:var(--white); font-size:15px; font-weight:900; letter-spacing:-0.5px; padding:6px 10px; border-radius:4px; line-height:1; }
+.brand-text { color:var(--white); }
+.brand-title { font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; }
+.brand-year { font-size:10px; color:var(--gray-400); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
+.header-stats { display:flex; align-items:center; gap:28px; }
+.hstat { text-align:center; }
+.hstat-num { font-size:20px; font-weight:800; color:var(--white); line-height:1; }
+.hstat-num.red { color:var(--red); }
+.hstat-num.gray { color:var(--gray-400); }
+.hstat-label { font-size:9px; color:var(--gray-400); text-transform:uppercase; letter-spacing:1px; margin-top:2px; }
+.header-right { display:flex; align-items:center; gap:10px; }
+.search-wrap { position:relative; }
+.search-wrap svg { position:absolute; left:10px; top:50%; transform:translateY(-50%); opacity:.4; pointer-events:none; }
+.search { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); border-radius:6px; padding:8px 12px 8px 34px; color:var(--white); font-size:12px; font-family:inherit; width:200px; outline:none; transition:all .2s; }
+.search:focus { background:rgba(255,255,255,.15); border-color:rgba(255,255,255,.35); }
+.search::placeholder { color:rgba(255,255,255,.35); }
+.hbtn { background:transparent; border:1px solid rgba(255,255,255,.2); color:rgba(255,255,255,.7); padding:7px 14px; border-radius:6px; font-size:11px; font-weight:600; font-family:inherit; letter-spacing:.5px; cursor:pointer; transition:all .2s; text-transform:uppercase; }
+.hbtn:hover { background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.4); color:var(--white); }
+.hbtn-red { background:var(--red); border-color:var(--red); color:var(--white); }
+.hbtn-red:hover { background:var(--red-hover); border-color:var(--red-hover); color:var(--white); }
+
+/* ═══ PROGRESS BAR ═══ */
+.progress-strip { height:3px; background:rgba(255,255,255,.08); }
+.progress-fill { height:100%; background:var(--red); transition:width .8s ease; }
+
+/* ═══ TIMELINE STRIP ═══ */
+.timeline-strip { background:var(--black); border-bottom:2px solid var(--red); padding:0 32px; overflow-x:auto; scrollbar-width:none; }
+.timeline-strip::-webkit-scrollbar { display:none; }
+.timeline-inner { max-width:1440px; margin:0 auto; display:flex; align-items:stretch; gap:0; min-width:700px; }
+.tq-group { display:flex; align-items:stretch; border-right:1px solid rgba(255,255,255,.1); }
+.tq-group:last-child { border-right:none; }
+.tq-label { writing-mode:vertical-rl; transform:rotate(180deg); font-size:9px; font-weight:800; letter-spacing:2px; color:var(--red); text-transform:uppercase; padding:12px 10px 12px 6px; border-right:1px solid rgba(255,255,255,.08); flex-shrink:0; }
+.tmonths { display:flex; }
+.tmonth { padding:10px 14px; cursor:pointer; font-size:10px; font-weight:700; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:1.5px; border:none; background:none; font-family:inherit; transition:all .2s; position:relative; white-space:nowrap; }
+.tmonth:hover { color:var(--white); }
+.tmonth.active { color:var(--white); }
+.tmonth.active::after { content:''; position:absolute; bottom:0; left:8px; right:8px; height:2px; background:var(--red); }
+.tmonth .dot-count { display:block; width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.2); margin:3px auto 0; }
+.tmonth.active .dot-count,
+.tmonth:hover .dot-count { background:var(--red); }
+.tmonth.has-events .dot-count { background:rgba(255,100,100,.5); }
+
+/* ═══ FILTER BAR ═══ */
+.filter-bar { background:var(--white); border-bottom:1px solid var(--gray-200); padding:0 32px; position:sticky; top:64px; z-index:90; }
+.filter-inner { max-width:1440px; margin:0 auto; display:flex; align-items:center; gap:8px; height:48px; flex-wrap:wrap; overflow:hidden; }
+.filter-divider { width:1px; height:20px; background:var(--gray-200); margin:0 4px; flex-shrink:0; }
+.fc { padding:5px 14px; border-radius:100px; border:1px solid var(--gray-200); background:var(--white); color:var(--gray-600); font-size:11px; font-weight:600; font-family:inherit; letter-spacing:.5px; text-transform:uppercase; cursor:pointer; transition:all .18s; white-space:nowrap; }
+.fc:hover { border-color:var(--black); color:var(--black); }
+.fc.active { background:var(--black); border-color:var(--black); color:var(--white); }
+.fc.active-red { background:var(--red); border-color:var(--red); color:var(--white); }
+.filter-right { margin-left:auto; display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.count-text { font-size:11px; color:var(--gray-400); letter-spacing:.5px; white-space:nowrap; }
+.sort-sel { border:1px solid var(--gray-200); border-radius:6px; padding:5px 10px; font-size:11px; font-family:inherit; background:var(--white); color:var(--gray-600); cursor:pointer; outline:none; }
+
+/* ═══ MAIN ═══ */
+main { max-width:1440px; margin:0 auto; padding:32px 32px 64px; }
+
+/* ═══ QUARTER HEADER ═══ */
+.q-section { margin-bottom:40px; }
+.q-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; padding:14px 20px; background:var(--black); border-radius:8px; }
+.q-num { font-size:28px; font-weight:900; color:var(--red); letter-spacing:-1px; line-height:1; flex-shrink:0; }
+.q-detail { flex:1; }
+.q-period { font-size:11px; font-weight:700; color:rgba(255,255,255,.5); text-transform:uppercase; letter-spacing:2px; margin-bottom:2px; }
+.q-title { font-size:15px; font-weight:700; color:var(--white); }
+.q-right { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.q-badge { font-size:10px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; padding:4px 12px; border-radius:100px; }
+.q-badge-total { background:rgba(255,255,255,.1); color:rgba(255,255,255,.7); }
+.q-badge-done { background:rgba(212,0,0,.3); color:#FF6666; }
+
+/* ═══ EVENT GRID ═══ */
+.event-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px; }
+
+/* ═══ EVENT CARD ═══ */
+.ecard { background:var(--white); border:1px solid var(--gray-200); border-radius:8px; padding:18px; cursor:pointer; transition:all .2s; position:relative; overflow:hidden; }
+.ecard::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:var(--gray-200); transition:background .2s; }
+.ecard.upcoming::before { background:#16a34a; }
+.ecard.upcoming.grp-ignite::before { background:var(--red); }
+.ecard.upcoming.grp-connect::before { background:var(--black); }
+.ecard.upcoming.grp-none::before { background:#16a34a; }
+.ecard.done::before { background:var(--gray-300); }
+.ecard:hover { border-color:var(--black); box-shadow:0 4px 20px rgba(0,0,0,.08); transform:translateY(-1px); }
+.ecard:hover::before { background:#16a34a; }
+.ecard.grp-ignite:hover::before { background:var(--red); }
+.ecard.grp-connect:hover::before { background:var(--black); }
+/* Group badge */
+.gbadge { display:inline-flex; align-items:center; gap:4px; font-size:9px; font-weight:800; letter-spacing:1px; text-transform:uppercase; padding:3px 9px; border-radius:100px; cursor:default; }
+.gbadge::before { content:''; display:inline-block; width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+.gbadge-ignite { background:rgba(212,0,0,.1); color:var(--red); border:1px solid rgba(212,0,0,.25); }
+.gbadge-ignite::before { background:var(--red); }
+.gbadge-connect { background:rgba(10,10,10,.08); color:var(--black); border:1px solid rgba(10,10,10,.18); }
+.gbadge-connect::before { background:var(--black); }
+.gbadge-none { background:var(--gray-100); color:var(--gray-400); border:1px solid var(--gray-200); }
+.gbadge-none::before { background:var(--gray-300); }
+/* Momentum on card */
+.ecard-momentum { font-size:11px; font-weight:600; color:var(--red); background:rgba(212,0,0,.06); border-left:2px solid var(--red); padding:6px 10px; border-radius:0 5px 5px 0; margin-bottom:10px; line-height:1.5; }
+.ecard.done .ecard-momentum { color:var(--gray-400); background:var(--gray-100); border-left-color:var(--gray-300); }
+/* Momentum textarea in modal */
+.momentum-ta { width:100%; border:1.5px dashed var(--gray-300); border-radius:8px; padding:10px 13px; font-size:13px; font-family:inherit; color:var(--black); background:rgba(212,0,0,.03); outline:none; resize:vertical; min-height:72px; line-height:1.6; transition:all .2s; margin-bottom:4px; }
+.momentum-ta:focus { border-color:var(--red); border-style:solid; background:var(--white); }
+.momentum-ta::placeholder { color:var(--gray-400); }
+.momentum-hint { font-size:10px; color:var(--gray-400); margin-bottom:20px; }
+/* Quick-assign group selector in modal */
+.group-assign { display:flex; align-items:center; gap:10px; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:8px; padding:10px 14px; margin-bottom:18px; }
+.group-assign-label { font-size:10px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--gray-400); flex-shrink:0; }
+.group-sel { border:1px solid var(--gray-200); border-radius:6px; padding:6px 10px; font-size:12px; font-weight:600; font-family:inherit; background:var(--white); color:var(--black); cursor:pointer; outline:none; transition:border-color .2s; }
+.group-sel:focus { border-color:var(--black); }
+.ecard-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; }
+.ecard-date { display:flex; flex-direction:column; }
+.ecard-day { font-size:28px; font-weight:900; color:var(--black); line-height:1; letter-spacing:-1px; }
+.ecard.done .ecard-day { color:var(--gray-400); }
+.ecard-month { font-size:10px; font-weight:700; color:var(--gray-400); letter-spacing:2px; text-transform:uppercase; margin-top:1px; }
+.estatus { font-size:9px; font-weight:800; letter-spacing:1px; text-transform:uppercase; padding:3px 10px; border-radius:100px; }
+.estatus.upcoming { background:rgba(22,163,74,.12); color:#16a34a; border:1px solid rgba(22,163,74,.25); }
+.estatus.done { background:var(--gray-100); color:var(--gray-400); border:1px solid var(--gray-200); }
+.ecard-name { font-size:14px; font-weight:700; color:var(--black); line-height:1.4; margin-bottom:10px; }
+.ecard.done .ecard-name { color:var(--gray-600); }
+.ecard-foot { display:flex; align-items:center; justify-content:space-between; padding-top:10px; border-top:1px solid var(--gray-100); }
+.ecard-tags { display:flex; gap:5px; flex-wrap:wrap; }
+.etag { font-size:9px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; padding:3px 9px; border-radius:4px; white-space:nowrap; }
+.etag-cat { background:var(--gray-100); color:var(--gray-600); }
+.etag-cat.bop { background:rgba(212,0,0,.08); color:var(--red); }
+.etag-cat.major { background:var(--black); color:var(--white); }
+.etag-cat.trip { background:rgba(212,0,0,.08); color:var(--red); }
+.etag-cat.summit { background:var(--black); color:var(--white); }
+.etag-cat.core { background:rgba(212,0,0,.08); color:var(--red); }
+.etag-pic { font-size:9px; font-weight:600; color:var(--gray-400); align-self:center; white-space:nowrap; }
+
+/* ═══ MONTH DIVIDER ═══ */
+.month-divider { display:flex; align-items:center; gap:12px; margin:24px 0 12px; }
+.month-name { font-size:11px; font-weight:800; letter-spacing:3px; text-transform:uppercase; color:var(--black); white-space:nowrap; }
+.month-line { flex:1; height:1px; background:var(--gray-200); }
+.month-count { font-size:10px; font-weight:600; color:var(--gray-400); white-space:nowrap; }
+
+/* ═══ MODAL ═══ */
+.overlay { position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:200; display:flex; align-items:center; justify-content:center; padding:24px; opacity:0; pointer-events:none; transition:opacity .2s; backdrop-filter:blur(2px); }
+.overlay.open { opacity:1; pointer-events:all; }
+.modal { background:var(--white); border-radius:12px; width:100%; max-width:680px; max-height:88vh; overflow-y:auto; transform:translateY(16px) scale(.98); transition:transform .22s; box-shadow:0 24px 60px rgba(0,0,0,.25); }
+.overlay.open .modal { transform:translateY(0) scale(1); }
+.modal-hdr { padding:0 0 0; border-bottom:1px solid var(--gray-200); position:sticky; top:0; background:var(--white); z-index:10; border-radius:12px 12px 0 0; overflow:hidden; }
+.modal-accent { height:4px; background:var(--red); }
+.modal-hdr-inner { padding:20px 24px 16px; display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
+.mcat { font-size:9px; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--red); margin-bottom:5px; }
+.mname { font-size:20px; font-weight:800; color:var(--black); line-height:1.3; }
+.m-close { background:var(--gray-100); border:none; border-radius:6px; color:var(--gray-600); cursor:pointer; font-size:16px; padding:6px 10px; line-height:1; transition:all .2s; flex-shrink:0; margin-top:2px; }
+.m-close:hover { background:var(--gray-200); color:var(--black); }
+.modal-tags { padding:0 24px 16px; display:flex; flex-wrap:wrap; gap:6px; }
+.mtag { font-size:10px; font-weight:600; color:var(--gray-600); background:var(--gray-100); padding:4px 12px; border-radius:100px; border:1px solid var(--gray-200); }
+.mstatus-tag.upcoming { background:rgba(212,0,0,.1); color:var(--red); border-color:rgba(212,0,0,.2); }
+.mstatus-tag.done { background:var(--gray-100); color:var(--gray-400); border-color:var(--gray-200); }
+.modal-body { padding:20px 24px 24px; }
+.m-sec { font-size:9px; font-weight:800; letter-spacing:2px; color:var(--gray-400); text-transform:uppercase; margin:0 0 10px; display:flex; align-items:center; gap:10px; }
+.m-sec::after { content:''; flex:1; height:1px; background:var(--gray-200); }
+.m-desc { font-size:13px; color:var(--gray-600); line-height:1.7; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:8px; padding:14px 16px; margin-bottom:20px; }
+.m-list { list-style:none; margin-bottom:20px; }
+.m-list li { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--gray-100); font-size:12px; color:var(--gray-600); line-height:1.6; }
+.m-list li:last-child { border-bottom:none; }
+.m-num { color:var(--red); font-weight:800; flex-shrink:0; min-width:16px; }
+.m-note { background:var(--gray-50); border-left:3px solid var(--red); border-radius:0 6px 6px 0; padding:12px 14px; font-size:12px; color:var(--gray-600); line-height:1.6; }
+.modal-ftr { padding:14px 24px; border-top:1px solid var(--gray-200); display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.mftr-l,.mftr-r { display:flex; gap:8px; }
+.mbtn { padding:8px 16px; border-radius:6px; font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; font-family:inherit; cursor:pointer; border:1px solid; transition:all .2s; }
+.mbtn-ghost { background:var(--white); border-color:var(--gray-200); color:var(--gray-600); }
+.mbtn-ghost:hover { border-color:var(--black); color:var(--black); }
+.mbtn-mark { background:var(--gray-100); border-color:var(--gray-200); color:var(--gray-600); }
+.mbtn-mark:hover { background:var(--gray-200); }
+.mbtn-done { background:rgba(212,0,0,.1); border-color:rgba(212,0,0,.2); color:var(--red); }
+.mbtn-done:hover { background:rgba(212,0,0,.2); }
+.mbtn-edit { background:var(--black); border-color:var(--black); color:var(--white); }
+.mbtn-edit:hover { background:#333; }
+.mbtn-save { background:var(--red); border-color:var(--red); color:var(--white); }
+.mbtn-save:hover { background:var(--red-hover); border-color:var(--red-hover); }
+.mbtn-delete { background:transparent; border-color:rgba(212,0,0,.3); color:var(--red); }
+.mbtn-delete:hover { background:rgba(212,0,0,.08); border-color:var(--red); }
+.mbtn-create { background:var(--white); border-color:rgba(255,255,255,.35); color:var(--white); font-weight:700; padding:7px 16px; }
+.mbtn-create:hover { background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.5); color:var(--white); }
+
+/* ═══ EDIT FIELDS ═══ */
+.ef { width:100%; border:1px solid var(--gray-200); border-radius:6px; padding:9px 12px; font-size:12px; font-family:inherit; color:var(--black); background:var(--white); outline:none; transition:border-color .2s; margin-bottom:8px; }
+.ef:focus { border-color:var(--black); }
+.ef-ta { resize:vertical; min-height:90px; line-height:1.6; }
+.ef-row { display:flex; gap:8px; }
+.ef-row .ef { margin-bottom:0; }
+
+/* ═══ EMPTY ═══ */
+.empty { text-align:center; padding:80px 24px; }
+.empty-title { font-size:20px; font-weight:800; color:var(--black); margin-bottom:6px; }
+.empty-sub { font-size:13px; color:var(--gray-400); }
+
+/* ═══ TOAST ═══ */
+.toast { position:fixed; bottom:24px; right:24px; background:var(--black); color:var(--white); padding:10px 18px; border-radius:6px; font-size:12px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; z-index:999; opacity:0; transform:translateY(8px); transition:all .25s; pointer-events:none; }
+.toast.show { opacity:1; transform:translateY(0); }
+
+/* ═══ SCROLLBAR ═══ */
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:var(--gray-100); }
+::-webkit-scrollbar-thumb { background:var(--gray-300); border-radius:3px; }
+
+@media(max-width:768px){
+  .header-inner{padding:0 16px}
+  .header-stats{display:none}
+  .search{width:140px}
+  .filter-bar{padding:0 16px}
+  main{padding:20px 16px 48px}
+  .event-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <img src="ignitex-logo.png" alt="IgniteX" style="height:36px;width:auto;display:block;flex-shrink:0;">
+      <div class="brand-text" style="margin-left:4px">
+        <div class="brand-title">Special Event Calendar</div>
+        <div class="brand-year">2026</div>
+      </div>
+    </div>
+    <div class="header-stats" id="statsBar"></div>
+    <div class="header-right">
+      <div class="search-wrap">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="search" id="searchInput" placeholder="Cari event...">
+      </div>
+      <button class="hbtn" onclick="exportCSV()">Export CSV</button>
+      <button class="hbtn hbtn-red" onclick="openCreateModal()">+ Tambah Event</button>
+      <button class="hbtn" onclick="confirmReset()">Reset</button>
+    </div>
+  </div>
+  <div class="progress-strip"><div class="progress-fill" id="progressFill"></div></div>
+</header>
+
+<div class="timeline-strip">
+  <div class="timeline-inner" id="timelineStrip"></div>
+</div>
+
+<div class="filter-bar">
+  <div class="filter-inner" id="filterBar">
+    <button class="fc active" id="fq-ALL" onclick="setFilter('q','ALL',this)">All</button>
+    <button class="fc" id="fq-Q1" onclick="setFilter('q','Q1',this)">Q1</button>
+    <button class="fc" id="fq-Q2" onclick="setFilter('q','Q2',this)">Q2</button>
+    <button class="fc" id="fq-Q3" onclick="setFilter('q','Q3',this)">Q3</button>
+    <button class="fc" id="fq-Q4" onclick="setFilter('q','Q4',this)">Q4</button>
+    <div class="filter-divider"></div>
+    <button class="fc" id="fs-all" onclick="setFilter('s','all',this)">Semua Status</button>
+    <button class="fc" id="fs-upcoming" onclick="setFilter('s','upcoming',this)">Upcoming</button>
+    <button class="fc" id="fs-done" onclick="setFilter('s','done',this)">Done</button>
+    <div class="filter-divider"></div>
+    <button class="fc active" id="fg-ALL" onclick="setFilter('g','ALL',this)">Semua</button>
+    <button class="fc" id="fg-Ignite" onclick="setFilter('g','Ignite',this)" style="color:var(--red);border-color:rgba(212,0,0,.3)">● Ignite</button>
+    <button class="fc" id="fg-Connect" onclick="setFilter('g','Connect',this)">● Connect</button>
+    <button class="fc" id="fg-none" onclick="setFilter('g','—',this)">Belum Ditandai</button>
+    <div class="filter-right">
+      <span class="count-text" id="countLabel"></span>
+    </div>
+  </div>
+</div>
+
+<main id="mainContent">
+  <div id="eventsContainer"></div>
+  <div class="empty" id="emptyState" style="display:none">
+    <div class="empty-title">Tidak ada event ditemukan</div>
+    <div class="empty-sub">Coba ubah filter atau kata kunci pencarian</div>
+  </div>
+</main>
+
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-hdr">
+      <div class="modal-accent"></div>
+      <div class="modal-hdr-inner">
+        <div>
+          <div class="mcat" id="mCat"></div>
+          <div class="mname" id="mName"></div>
+        </div>
+        <button class="m-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-tags" id="mTags"></div>
+    </div>
+    <div class="modal-body" id="mBody"></div>
+    <div class="modal-ftr">
+      <div class="mftr-l">
+        <button class="mbtn mbtn-done" id="btnMarkDone" onclick="markDone()" style="display:none">Tandai Done</button>
+        <button class="mbtn mbtn-delete" id="btnDelete" onclick="deleteEvent()" style="display:none">Hapus</button>
+      </div>
+      <div class="mftr-r">
+        <button class="mbtn mbtn-ghost" onclick="closeModal()">Tutup</button>
+        <button class="mbtn mbtn-edit" id="btnEdit" onclick="toggleEdit()">Edit</button>
+        <button class="mbtn mbtn-save" id="btnSave" onclick="saveEdit()" style="display:none">Simpan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════ DATA ═══════════════════════════
+const DEFAULT = [
+  // ─── Q1 ───
+  {id:1,q:'Q1',month:'JAN',date:'2026-01-25',dateDisplay:'25',monthFull:'Januari',name:'BOP (Gacha Angpao)',category:'BOP',pic:'—',status:'Done',
+    desc:'Business Opportunity Presentation dengan tema spesial Gacha Angpao. Sesi perkenalan peluang bisnis yang dikemas dalam suasana perayaan Tahun Baru Imlek.',
+    agenda:['Registrasi dan welcome','Opening & perkenalan program','Presentasi peluang bisnis (Gacha Angpao theme)','Q&A dan follow-up'],
+    tujuan:['Memperkenalkan peluang bisnis kepada prospek baru','Membangun excitement dengan konsep Gacha Angpao','Menghasilkan follow-up leads berkualitas'],
+    notes:'Siapkan merchandise dan angpao untuk door prize.'},
+
+  {id:2,q:'Q1',month:'FEB',date:'2026-02-23',dateDisplay:'23',monthFull:'Februari',name:'Special Monday — Imlek',category:'SPECIAL MONDAY',pic:'Jeshua',status:'Done',
+    desc:'Perayaan Tahun Baru Imlek dalam format Special Monday. Sesi inspiratif yang menggabungkan tradisi dan semangat bisnis baru.',
+    agenda:['Opening dengan nuansa Imlek','Sharing motivasi','Team celebration','Penetapan target baru'],
+    tujuan:['Membangun semangat awal tahun','Mempererat kebersamaan tim','Menetapkan komitmen Q1'],
+    notes:'Dekorasi Imlek, angpao untuk seluruh anggota.'},
+
+  {id:3,q:'Q1',month:'MAR',date:'2026-03-03',dateDisplay:'3–7',monthFull:'Maret',name:'Vietnam Trip',category:'TRIP',pic:'Alfred',status:'Done',
+    desc:'Perjalanan insentif ke Vietnam untuk top performer pilihan. Kombinasi wisata, bonding, dan sesi perencanaan strategis di luar negeri.',
+    agenda:['Hari 1: Terbang ke Ho Chi Minh / Hanoi','Hari 2-3: City tour & cultural experience','Hari 4: Business planning session & team bonding','Hari 5: Perjalanan pulang'],
+    tujuan:['Apresiasi top performer Q1','Bonding dan membangun kepercayaan antar pemimpin','Merencanakan strategi Q2 dalam suasana segar'],
+    notes:'Alfred sebagai PIC. Koordinasikan visa dan tiket.'},
+
+  {id:4,q:'Q1',month:'MAR',date:'2026-03-13',dateDisplay:'13',monthFull:'Maret',name:'IgniteX Outing',category:'OUTING',pic:'Alfred',status:'Done',
+    desc:'Team outing seluruh anggota IgniteX untuk mempererat kebersamaan, refresh energi, dan membangun semangat kolektif.',
+    agenda:['Keberangkatan dari titik kumpul','Aktivitas outdoor dan games tim','Makan siang bersama','Free time & bonding','Perjalanan pulang'],
+    tujuan:['Membangun kebersamaan tim','Refresh energi setelah sprint','Meningkatkan sinergi antar anggota'],
+    notes:'PIC: Alfred. Siapkan transport dan logistik.'},
+
+  {id:5,q:'Q1',month:'MAR',date:'2026-03-30',dateDisplay:'30',monthFull:'Maret',name:'Special Monday — Lebaran',category:'SPECIAL MONDAY',pic:'Ivan',status:'Done',
+    desc:'Special Monday edisi Lebaran. Sesi perayaan Idul Fitri yang hangat bersama seluruh tim IgniteX, dipadukan dengan sesi refleksi dan rencana ke depan.',
+    agenda:['Opening & salam Lebaran','Sesi refleksi dan syukur','Sharing cerita & silaturahmi','Penetapan target Q2'],
+    tujuan:['Merayakan Idul Fitri bersama','Membangun semangat baru pasca Ramadan','Mengawali Q2 dengan energi positif'],
+    notes:'PIC: Ivan. Siapkan konsumsi khas Lebaran.'},
+
+  // ─── Q2 ───
+  {id:6,q:'Q2',month:'APR',date:'2026-04-06',dateDisplay:'6',monthFull:'April',name:'Leaders Quarterly Meeting',category:'LEADERS MEETING',pic:'Jeremy',status:'Done',
+    desc:'Rapat kuartalan para pemimpin tim IgniteX. Review pencapaian Q1, identifikasi gap, dan alignment strategi untuk Q2.',
+    agenda:['Review data dan pencapaian Q1','Identifikasi area improvement','Strategi dan target Q2','Action plan per tim','Closing & commitment'],
+    tujuan:['Mengevaluasi Q1 secara jujur','Menyelaraskan strategi Q2','Membangun accountability antar pemimpin'],
+    notes:'PIC: Jeremy. Data Q1 harus sudah siap sebelum meeting.'},
+
+  {id:7,q:'Q2',month:'APR',date:'2026-04-08',dateDisplay:'8–10',monthFull:'April',name:'Ignite KL',category:'TRIP',pic:'Jeshua',status:'Done',
+    desc:'Perjalanan ke Kuala Lumpur untuk top qualifier. Sesi networking, inspirasi, dan ekspansi wawasan bisnis internasional.',
+    agenda:['Hari 1: Terbang ke KL, check-in','Hari 2: Company visit & networking','Hari 3: Perjalanan pulang'],
+    tujuan:['Apresiasi qualifier dengan pengalaman internasional','Membuka wawasan bisnis lintas negara','Membangun motivasi untuk target selanjutnya'],
+    notes:'PIC: Jeshua. Koordinasikan visa Malaysia.'},
+
+  {id:8,q:'Q2',month:'APR',date:'2026-04-19',dateDisplay:'19',monthFull:'April',name:'BOP — Cascade Kofy',category:'BOP',pic:'Ivan',status:'Done',
+    desc:'Business Opportunity Presentation dengan konsep Cascade — sesi presentasi berantai yang melibatkan lebih banyak peserta melalui referral tim.',
+    agenda:['Registrasi','Opening & ice breaking','Presentasi peluang bisnis (Cascade format)','Testimoni dari anggota','Q&A dan follow-up 1-on-1'],
+    tujuan:['Menghasilkan prospek rekrutmen baru','Mendemonstrasikan sistem cascade','Meningkatkan jumlah peserta melalui referral'],
+    notes:'PIC: Ivan. Format cascade — setiap anggota bawa minimal 2 tamu.'},
+
+  {id:9,q:'Q2',month:'MEI',date:'2026-05-02',dateDisplay:'2',monthFull:'Mei',name:'Road to Ideascape',category:'ROAD TO IDEASCAPE',pic:'Jeremy',status:'Done',
+    desc:'Sesi Road to Ideascape pertama. Forum inspirasi dan sharing ide-ide terbaik untuk memacu akselerasi anggota.',
+    agenda:['Update leaderboard','Sharing ide & strategi dari top performer','Recognition & milestone','Target berikutnya'],
+    tujuan:['Menciptakan iklim kompetisi sehat','Mengapresiasi pencapaian','Mendorong akselerasi produksi'],
+    notes:'PIC: Jeremy.'},
+
+  {id:10,q:'Q2',month:'MEI',date:'2026-05-16',dateDisplay:'16',monthFull:'Mei',name:'Road to Ideascape',category:'ROAD TO IDEASCAPE',pic:'Jeremy',status:'Done',
+    desc:'Sesi Road to Ideascape kedua. Evaluasi progress dan akselerasi menuju target akhir bulan.',
+    agenda:['Leaderboard update','Breakthrough session','Recognition','Sprint plan akhir bulan'],
+    tujuan:['Evaluasi progres mid-month','Identifikasi yang butuh support','Dorong sprint akhir bulan'],
+    notes:'PIC: Jeremy.'},
+
+  {id:11,q:'Q2',month:'MEI',date:'2026-05-22',dateDisplay:'22',monthFull:'Mei',name:'Golf Turney',category:'SPORT',pic:'Ketum Ivan',status:'Done',
+    desc:'Turnamen golf eksklusif untuk pemimpin dan mitra IgniteX. Ajang networking premium sambil menikmati olahraga bersama.',
+    agenda:['Registrasi dan warm-up','Tee-off & turnamen 18 holes','Lunch & networking','Award ceremony'],
+    tujuan:['Networking premium antar pemimpin','Memperkuat relasi dengan mitra','Menciptakan suasana eksklusif yang memotivasi'],
+    notes:'PIC: Ketum Ivan. Siapkan hadiah turnamen.'},
+
+  {id:13,q:'Q2',month:'JUN',date:'2026-06-06',dateDisplay:'6–8',monthFull:'Juni',name:'Reconnect',category:'MAJOR EVENT',pic:'—',status:'Upcoming',
+    desc:'Event besar Reconnect — momen pertemuan kembali seluruh ekosistem IgniteX. Tiga hari penuh energi, inspirasi, dan komitmen bersama.',
+    agenda:['Hari 1: Arrival, registrasi, welcome dinner','Hari 2: Keynote, breakout session, gala night','Hari 3: Action planning, commitment, closing'],
+    tujuan:['Menyatukan kembali seluruh anggota','Membangun momentum besar H2','Menyelaraskan visi dan komitmen bersama'],
+    notes:'Event terbesar Q2. Persiapan matang diperlukan.'},
+
+  {id:15,q:'Q2',month:'JUN',date:'2026-06-27',dateDisplay:'27',monthFull:'Juni',name:'Road to Ideascape',category:'ROAD TO IDEASCAPE',pic:'Jeremy',status:'Upcoming',
+    desc:'Road to Ideascape — sesi inspirasi dan sharing ide-ide terbaik bersama Jeremy. Membangun momentum dan menyatukan visi tim menuju Ideascape.',
+    agenda:['Opening & energizing','Sharing ide & insight dari Jeremy','Breakout: aplikasi ide ke target pribadi','Recognition & komitmen','Closing & preview next session'],
+    tujuan:['Menginspirasi anggota dengan ide segar','Membangun antusiasme menuju Ideascape','Menetapkan aksi konkret dari sesi'],
+    notes:'Speaker: Jeremy.'},
+
+  // ─── Q3 ───
+  {id:16,q:'Q3',month:'JUL',date:'2026-07-06',dateDisplay:'6',monthFull:'Juli',name:'Leaders Quarterly Meeting',category:'LEADERS MEETING',pic:'Alfred',status:'Upcoming',
+    desc:'Rapat kuartalan leaders edisi Q3. Review Q2 dan perencanaan menyeluruh untuk Q3.',
+    agenda:['Review data Q2','Gap analysis','Strategi Q3','Personal leadership plan','Commitment'],
+    tujuan:['Review jujur Q2','Selaraskan strategi Q3','Bangun accountability pemimpin'],
+    notes:'PIC: Alfred.'},
+
+  {id:17,q:'Q3',month:'JUL',date:'2026-07-19',dateDisplay:'19',monthFull:'Juli',name:'BOP',category:'BOP',pic:'Ivan',status:'Upcoming',
+    desc:'Business Opportunity Presentation reguler untuk prospek rekrutmen baru bulan Juli.',
+    agenda:['Registrasi & welcome','Presentasi peluang bisnis','Testimoni','Follow-up 1-on-1'],
+    tujuan:['Rekrutmen prospek baru','Presentasi program IgniteX','Generate follow-up leads'],
+    notes:'PIC: Ivan.'},
+
+  {id:32,q:'Q3',month:'JUL',date:'2026-07-11',dateDisplay:'11',monthFull:'Juli',name:'Road to Ideascape',category:'ROAD TO IDEASCAPE',pic:'Jeshua',status:'Upcoming',
+    desc:'Road to Ideascape — sesi bersama Jeshua. Mendalami ide-ide inovatif dan membangun strategi menuju Ideascape Summit.',
+    agenda:['Opening & energizing','Sharing ide & insight dari Jeshua','Breakout: aplikasi ide ke target pribadi','Recognition & komitmen','Closing & preview next session'],
+    tujuan:['Menginspirasi anggota dengan perspektif segar Jeshua','Membangun momentum menuju Ideascape','Menetapkan aksi konkret dari sesi'],
+    notes:'Speaker: Jeshua.'},
+
+  {id:33,q:'Q3',month:'JUL',date:'2026-07-25',dateDisplay:'25',monthFull:'Juli',name:'Road to Ideascape',category:'ROAD TO IDEASCAPE',pic:'Ivan',status:'Upcoming',
+    desc:'Road to Ideascape — sesi bersama Ivan. Memperdalam ide-ide bisnis dan mempersiapkan diri menuju Ideascape Summit September.',
+    agenda:['Opening & energizing','Sharing ide & insight dari Ivan','Breakout: aplikasi ide ke target pribadi','Recognition & komitmen','Closing & preview next session'],
+    tujuan:['Menginspirasi anggota lewat sudut pandang Ivan','Perkuat fondasi menuju Ideascape','Menetapkan aksi konkret dari sesi'],
+    notes:'Speaker: Ivan.'},
+
+  {id:34,q:'Q3',month:'AGS',date:'2026-08-08',dateDisplay:'8',monthFull:'Agustus',name:'Road to Ideascape',category:'ROAD TO IDEASCAPE',pic:'Andhika & Jenni',status:'Upcoming',
+    desc:'Road to Ideascape — sesi kolaborasi Andhika dan Jenni. Dua perspektif berbeda yang saling melengkapi untuk memperkaya ide-ide menuju Ideascape.',
+    agenda:['Opening & energizing','Sharing ide dari Andhika','Sharing ide dari Jenni','Breakout: sinergi dua perspektif','Recognition & komitmen','Closing'],
+    tujuan:['Hadirkan keragaman sudut pandang dalam satu sesi','Perkuat kolaborasi antar anggota','Membangun antusiasme sprint terakhir menuju Ideascape'],
+    notes:'Speaker: Andhika & Jenni (dual speaker session).'},
+
+  {id:35,q:'Q3',month:'AGS',date:'2026-08-22',dateDisplay:'22',monthFull:'Agustus',name:'Road to Ideascape',category:'ROAD TO IDEASCAPE',pic:'Alfred',status:'Upcoming',
+    desc:'Road to Ideascape — sesi terakhir sebelum STRIGNITE SUMMIT IDEASCAPE. Alfred memimpin sesi final untuk memastikan seluruh anggota siap dan berkomitmen penuh.',
+    agenda:['Opening & recap perjalanan Road to Ideascape','Final sharing & insight dari Alfred','Readiness check menuju Summit','Komitmen & pledge','Countdown menuju STRIGNITE SUMMIT'],
+    tujuan:['Tutup seri Road to Ideascape dengan kuat','Pastikan kesiapan penuh menuju Summit September','Bakar semangat terakhir sebelum STRIGNITE SUMMIT IDEASCAPE'],
+    notes:'Speaker: Alfred. Sesi penutup Road to Ideascape sebelum Summit 4–6 Sep.'},
+
+  {id:18,q:'Q3',month:'SEPT',date:'2026-09-04',dateDisplay:'4–6',monthFull:'September',name:'STRIGNITE SUMMIT : IDEASCAPE',category:'SUMMIT',pic:'Jeremy',status:'Upcoming',
+    desc:'STRIGNITE SUMMIT : IDEASCAPE — puncak tertinggi kepemimpinan IgniteX 2026. Tiga hari transformatif yang menggabungkan ide besar, strategi nyata, dan komitmen pemimpin terbaik untuk menutup tahun dengan kuat.',
+    agenda:['Hari 1 (4/9): Arrival, check-in, IDEASCAPE vision night','Hari 2 (5/9): Leadership sessions, idea marathon, strategy workshop','Hari 3 (6/9): Action planning, commitment signing, closing ceremony'],
+    tujuan:['Menyatukan visi para pemimpin di bawah tema Ideascape','Menyusun roadmap Q4 dan 2027 berbasis ide-ide terbaik','Membangun ikatan dan komitmen kuat di level kepemimpinan'],
+    notes:'PIC: Jeremy. Event eksklusif untuk leaders. Venue TBD.'},
+
+  {id:19,q:'Q3',month:'AGS',date:'2026-08-15',dateDisplay:'15',monthFull:'Agustus',name:'CORE #1',category:'CORE',pic:'Jeremy',status:'Upcoming',
+    desc:'Sesi pertama CORE Agustus — training intensif pengembangan kompetensi inti anggota IgniteX.',
+    agenda:['Foundation review','Skill building session','Role play & practice','Commitment & follow-up'],
+    tujuan:['Tingkatkan kompetensi teknis','Perkuat fondasi skill','Siapkan eksekusi sprint'],
+    notes:'PIC: Jeremy.'},
+
+  {id:20,q:'Q3',month:'AGS',date:'2026-08-17',dateDisplay:'17',monthFull:'Agustus',name:'Special Monday — Lomba',category:'SPECIAL MONDAY',pic:'Alfred',status:'Upcoming',
+    desc:'Special Monday edisi kompetisi. Sesi motivasi yang dikemas dalam format lomba untuk memicu semangat dan healthy competition.',
+    agenda:['Opening & briefing lomba','Kompetisi antar anggota','Penjurian dan pengumuman','Closing & celebration'],
+    tujuan:['Ciptakan kompetisi sehat','Tingkatkan engagement anggota','Apresiasi yang fun dan berkesan'],
+    notes:'PIC: Alfred. Siapkan hadiah lomba.'},
+
+  {id:21,q:'Q3',month:'AGS',date:'2026-08-22',dateDisplay:'22',monthFull:'Agustus',name:'Road to AAB — Biweekly',category:'ROAD TO AAB',pic:'Jeremy',status:'Upcoming',
+    desc:'Sesi biweekly Road to AAB — program persiapan intensif menuju target Agent of the Board.',
+    agenda:['Progress check AAB candidates','Skill gap filling','Strategy refinement','Accountability & next steps'],
+    tujuan:['Track progress AAB candidates','Identifikasi gap dan solusi','Pastikan eksekusi on-track'],
+    notes:'PIC: Jeremy. Khusus kandidat AAB.'},
+
+  {id:22,q:'Q3',month:'AGS',date:'2026-08-29',dateDisplay:'29',monthFull:'Agustus',name:'CORE #2',category:'CORE',pic:'Jeremy',status:'Upcoming',
+    desc:'Sesi kedua CORE Agustus. Sprint akhir bulan dan persiapan September.',
+    agenda:['Leaderboard dan progress','Advanced skill session','Sprint plan September','Closing Agustus'],
+    tujuan:['Evaluasi progress Agustus','Persiapkan September sprint','Tutup Agustus kuat'],
+    notes:'PIC: Jeremy.'},
+
+  {id:23,q:'Q3',month:'SEPT',date:'2026-09-12',dateDisplay:'12',monthFull:'September',name:'CORE #3',category:'CORE',pic:'—',status:'Upcoming',
+    desc:'CORE sesi pertama September. Mid-month check dan akselerasi.',
+    agenda:['Update pencapaian','Skill reinforcement','Strategy adjustment','Action plan'],
+    tujuan:['Evaluasi mid-September','Akselerasi menuju target','Jaga momentum Q3'],
+    notes:''},
+
+  {id:24,q:'Q3',month:'SEPT',date:'2026-09-26',dateDisplay:'26',monthFull:'September',name:'CORE #4',category:'CORE',pic:'—',status:'Upcoming',
+    desc:'CORE penutup Q3. Closing kuartal dan preview Q4.',
+    agenda:['Final review Q3','Recognition pencapaian','Preview Q4 strategy','Momentum building'],
+    tujuan:['Tutup Q3 dengan kuat','Apresiasi pencapaian kuartal','Bangun energi Q4'],
+    notes:''},
+
+  // ─── Q4 ───
+  {id:25,q:'Q4',month:'OKT',date:'2026-10-03',dateDisplay:'3',monthFull:'Oktober',name:'Road to AAB — Final',category:'ROAD TO AAB',pic:'Jeremy',status:'Upcoming',
+    desc:'Sesi final Road to AAB. Evaluasi dan pendampingan terakhir bagi kandidat AAB sebelum closing tahunan.',
+    agenda:['Final AAB readiness check','Last-mile strategy','Commitment dan action plan','Support system briefing'],
+    tujuan:['Pastikan semua kandidat siap','Final push untuk AAB qualification','Tidak ada yang tertinggal'],
+    notes:'PIC: Jeremy. Momen krusial untuk kandidat AAB.'},
+
+  {id:26,q:'Q4',month:'OKT',date:'2026-10-05',dateDisplay:'5',monthFull:'Oktober',name:'Leaders Quarterly Meeting',category:'LEADERS MEETING',pic:'Alfred',status:'Upcoming',
+    desc:'Meeting kuartalan Q4 para pemimpin. Review Q3 dan perencanaan sprint akhir tahun.',
+    agenda:['Review Q3 lengkap','Gap analysis','Final sprint Q4 strategy','Year-end action plan','Commitment signing'],
+    tujuan:['Review Q3 jujur','Selaraskan strategi akhir tahun','Bangun komitmen penutup tahun'],
+    notes:'PIC: Alfred. Momen terpenting di Q4.'},
+
+  {id:27,q:'Q4',month:'OKT',date:'2026-10-10',dateDisplay:'10',monthFull:'Oktober',name:'CORE #5',category:'CORE',pic:'—',status:'Upcoming',
+    desc:'CORE Q4 pertama. Kick-off sprint akhir tahun.',
+    agenda:['Q4 kick-off','Skill and mindset refresh','Sprint planning','Team accountability'],
+    tujuan:['Mulai Q4 dengan energi tinggi','Set tone sprint akhir tahun','Alignment seluruh anggota'],
+    notes:''},
+
+  {id:28,q:'Q4',month:'OKT',date:'2026-10-11',dateDisplay:'11',monthFull:'Oktober',name:'BOP',category:'BOP',pic:'Jeshua',status:'Upcoming',
+    desc:'Business Opportunity Presentation Oktober. Rekrutmen terakhir yang bisa onboard sebelum year-end.',
+    agenda:['Registrasi & welcome','Presentasi year-end opportunity','Urgensi bergabung di Q4','Follow-up 1-on-1'],
+    tujuan:['Rekrutmen last-chance Q4','Ciptakan urgensi bergabung','Generate prospek kuat'],
+    notes:'PIC: Jeshua. Tekankan urgensi year-end.'},
+
+  {id:29,q:'Q4',month:'OKT',date:'2026-10-17',dateDisplay:'17–18',monthFull:'Oktober',name:'Final Sprint',category:'MAJOR EVENT',pic:'—',status:'Upcoming',
+    desc:'Final Sprint dua hari — momen paling intens sepanjang tahun. Semua anggota fokus penuh pada penutupan target tahunan.',
+    agenda:['Hari 1 (17/10): War room session, strategy all-in, evening motivation','Hari 2 (18/10): Execution day, real-time tracking, closing ceremony'],
+    tujuan:['Eksekusi closing target tahunan','Ciptakan urgency maksimal','Tidak ada yang menyerah sebelum selesai'],
+    notes:'Event terpenting Q4. Semua hands on deck.'},
+
+  {id:30,q:'Q4',month:'DES',date:'2026-12-04',dateDisplay:'4',monthFull:'Desember',name:'IgniteX Outing',category:'OUTING',pic:'Ivan',status:'Upcoming',
+    desc:'Team outing akhir tahun IgniteX. Perayaan dan apresiasi seluruh tim setelah satu tahun penuh perjuangan.',
+    agenda:['Keberangkatan ke venue outing','Aktivitas dan games tim','Makan siang bersama','Recognition sekilas pencapaian 2026','Perjalanan pulang'],
+    tujuan:['Rayakan perjalanan 2026 bersama','Refresh dan recharge tim','Perkuat ikatan akhir tahun'],
+    notes:'PIC: Ivan. Akhiri tahun dengan semangat.'},
+
+  {id:31,q:'Q4',month:'DES',date:'2026-12-19',dateDisplay:'19',monthFull:'Desember',name:'IgniteX Christmas',category:'MAJOR EVENT',pic:'Jeshua',status:'Upcoming',
+    desc:'Perayaan Natal dan Year-End IgniteX 2026. Malam gala penuh apresiasi, kenangan, dan semangat menyambut 2027.',
+    agenda:['Red carpet arrival','Dinner gala','Video highlights 2026','Pengumuman penghargaan akhir tahun','Peluncuran tema 2027','Toast & penutupan'],
+    tujuan:['Apresiasi seluruh anggota dan keluarga','Rayakan pencapaian 2026','Bangkitkan semangat menuju 2027'],
+    notes:'PIC: Jeshua. Undang keluarga. Dress code: formal.'}
+];
+
+// ═══════════════════════════ STATE ═══════════════════════════
+const STORAGE_KEY = 'ignitex_special_2026_v7';
+let events = [], filterQ = 'ALL', filterS = 'all', filterG = 'ALL', searchQ = '', curEvent = null, isEditing = false, isCreating = false;
+
+const QUARTER_LABELS = {Q1:'Januari — Maret',Q2:'April — Juni',Q3:'Juli — September',Q4:'Oktober — Desember'};
+const MONTHS_ORDER = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'];
+const MONTHS_FULL = {JAN:'Januari',FEB:'Februari',MAR:'Maret',APR:'April',MEI:'Mei',JUN:'Juni',JUL:'Juli',AGS:'Agustus',SEPT:'September',OKT:'Oktober',NOV:'November',DES:'Desember'};
+const CAT_CLASS = {BOP:'bop','SPECIAL MONDAY':'','ROAD TO IDEASCAPE':'trip','LEADERS MEETING':'','TRIP':'trip','OUTING':'','CORE':'core','ROAD TO AAB':'','MAJOR EVENT':'major','SUMMIT':'summit','SPORT':''};
+
+function load() {
+  const s = localStorage.getItem(STORAGE_KEY);
+  events = s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT));
+  events.forEach(e => { if(!e.group) e.group = '—'; if(e.momentum===undefined) e.momentum = ''; });
+}
+function persist() { localStorage.setItem(STORAGE_KEY, JSON.stringify(events)); showToast('Tersimpan'); }
+function confirmReset() { if(confirm('Reset semua data ke default?')) { events = JSON.parse(JSON.stringify(DEFAULT)); localStorage.removeItem(STORAGE_KEY); render(); showToast('Data direset'); } }
+
+// ═══════════════════════════ FILTER ═══════════════════════════
+function setFilter(type, val, el) {
+  if(type==='q') { filterQ=val; document.querySelectorAll('[id^="fq-"]').forEach(b=>b.classList.remove('active')); el.classList.add('active'); }
+  if(type==='s') { filterS=val; document.querySelectorAll('[id^="fs-"]').forEach(b=>b.classList.remove('active')); el.classList.add('active'); }
+  if(type==='g') { filterG=val; document.querySelectorAll('[id^="fg-"]').forEach(b=>{ b.classList.remove('active'); b.style.removeProperty('background'); b.style.removeProperty('color'); b.style.removeProperty('border-color'); }); el.classList.add('active'); if(val==='Ignite') { el.style.background='var(--red)'; el.style.color='white'; el.style.borderColor='var(--red)'; } }
+  render();
+}
+
+function getFiltered() {
+  return events.filter(e => {
+    if(filterQ !== 'ALL' && e.q !== filterQ) return false;
+    if(filterS !== 'all' && e.status.toLowerCase() !== filterS) return false;
+    if(filterG !== 'ALL' && (e.group||'—') !== filterG) return false;
+    if(searchQ) {
+      const q = searchQ.toLowerCase();
+      if(![e.name,e.category,e.pic,e.month,e.q,(e.group||'')].some(v => v.toLowerCase().includes(q))) return false;
+    }
+    return true;
+  });
+}
+
+// ═══════════════════════════ RENDER ═══════════════════════════
+function render() {
+  const f = getFiltered();
+  const total = events.length;
+  const done = events.filter(e=>e.status==='Done').length;
+  const upcoming = events.filter(e=>e.status==='Upcoming').length;
+  const pct = total ? Math.round(done/total*100) : 0;
+
+  // Stats
+  document.getElementById('statsBar').innerHTML = `
+    <div class="hstat"><div class="hstat-num">${total}</div><div class="hstat-label">Total Events</div></div>
+    <div class="hstat"><div class="hstat-num gray">${done}</div><div class="hstat-label">Done</div></div>
+    <div class="hstat"><div class="hstat-num red">${upcoming}</div><div class="hstat-label">Upcoming</div></div>
+    <div class="hstat"><div class="hstat-num">${pct}%</div><div class="hstat-label">Progress</div></div>`;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('countLabel').textContent = f.length + ' event ditampilkan';
+
+  // Timeline strip
+  const quarters = [{q:'Q1',months:['JAN','FEB','MAR']},{q:'Q2',months:['APR','MEI','JUN']},{q:'Q3',months:['JUL','AGS','SEPT']},{q:'Q4',months:['OKT','NOV','DES']}];
+  document.getElementById('timelineStrip').innerHTML = quarters.map(({q,months}) => {
+    const monthBtns = months.map(m => {
+      const cnt = events.filter(e=>e.month===m).length;
+      return `<button class="tmonth${m===getActiveMonth()?' active':''} ${cnt>0?'has-events':''}" onclick="scrollToMonth('${m}')">${m}<span class="dot-count"></span></button>`;
+    }).join('');
+    return `<div class="tq-group"><div class="tq-label">${q}</div><div class="tmonths">${monthBtns}</div></div>`;
+  }).join('');
+
+  // Content
+  const container = document.getElementById('eventsContainer');
+  const empty = document.getElementById('emptyState');
+  if(!f.length) { container.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+
+  const quarters2 = ['Q1','Q2','Q3','Q4'];
+  let html = '';
+  quarters2.forEach(q => {
+    const qEvents = f.filter(e=>e.q===q);
+    if(!qEvents.length) return;
+    const qTotal = qEvents.length;
+    const qDone = qEvents.filter(e=>e.status==='Done').length;
+    html += `<div class="q-section" id="section-${q}">
+      <div class="q-header">
+        <div class="q-num">${q}</div>
+        <div class="q-detail">
+          <div class="q-period">${QUARTER_LABELS[q]}</div>
+          <div class="q-title">2026 Special Event Calendar</div>
+        </div>
+        <div class="q-right">
+          <span class="q-badge q-badge-done">${qDone} Done</span>
+          <span class="q-badge q-badge-total">${qTotal} Events</span>
+        </div>
+      </div>`;
+
+    const monthsInQ = [...new Set(qEvents.map(e=>e.month))].sort((a,b)=>MONTHS_ORDER.indexOf(a)-MONTHS_ORDER.indexOf(b));
+    monthsInQ.forEach(m => {
+      const mEvents = qEvents.filter(e=>e.month===m).sort((a,b)=>a.date.localeCompare(b.date));
+      html += `<div id="month-${m}">
+        <div class="month-divider">
+          <div class="month-name">${MONTHS_FULL[m]||m}</div>
+          <div class="month-line"></div>
+          <div class="month-count">${mEvents.length} event</div>
+        </div>
+        <div class="event-grid">${mEvents.map(eventCard).join('')}</div>
+      </div>`;
+    });
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+function groupBadgeClass(g) {
+  if(g==='Ignite') return 'gbadge-ignite';
+  if(g==='Connect') return 'gbadge-connect';
+  return 'gbadge-none';
+}
+function groupCardClass(g) {
+  if(g==='Ignite') return 'grp-ignite';
+  if(g==='Connect') return 'grp-connect';
+  return 'grp-none';
+}
+
+function eventCard(e) {
+  const sc = e.status.toLowerCase();
+  const catClass = CAT_CLASS[e.category] || '';
+  const grp = e.group || '—';
+  const gc = groupCardClass(grp);
+  const gbc = groupBadgeClass(grp);
+  const gLabel = grp === '—' ? 'Belum' : grp;
+  return `<div class="ecard ${sc} ${gc}" onclick="openModal(${e.id})">
+    <div class="ecard-head">
+      <div class="ecard-date">
+        <div class="ecard-day">${e.dateDisplay}</div>
+        <div class="ecard-month">${e.month} 2026</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+        <span class="estatus ${sc}">${e.status}</span>
+        <span class="gbadge ${gbc}">${gLabel}</span>
+      </div>
+    </div>
+    <div class="ecard-name">${e.name}</div>
+    ${e.momentum?`<div class="ecard-momentum">📢 ${e.momentum}</div>`:''}
+    <div class="ecard-foot">
+      <div class="ecard-tags">
+        <span class="etag etag-cat ${catClass}">${e.category}</span>
+        ${e.pic!=='—'?`<span class="etag etag-cat">${e.pic}</span>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function getActiveMonth() {
+  const now = new Date();
+  const months = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'];
+  return months[now.getMonth()] || 'MEI';
+}
+function scrollToMonth(m) {
+  const el = document.getElementById('month-'+m);
+  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ═══════════════════════════ MODAL ═══════════════════════════
+function openModal(id) {
+  curEvent = events.find(e=>e.id===id);
+  isEditing = false; isCreating = false;
+  buildModal();
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function openCreateModal() {
+  isCreating = true; isEditing = false;
+  curEvent = {id:null,q:'Q1',month:'JAN',date:'',dateDisplay:'',monthFull:'Januari',name:'',category:'BOP',pic:'—',group:'—',status:'Upcoming',desc:'',agenda:[],tujuan:[],notes:'',momentum:''};
+  buildModal();
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  curEvent = null; isEditing = false; isCreating = false;
+}
+function deleteEvent() {
+  if(!curEvent) return;
+  if(!confirm(`Hapus event "${curEvent.name}"? Tindakan ini tidak bisa dibatalkan.`)) return;
+  events = events.filter(e=>e.id!==curEvent.id);
+  persist(); closeModal(); render();
+  showToast('Event dihapus');
+}
+function handleOverlayClick(ev) { if(ev.target===document.getElementById('overlay')) closeModal(); }
+
+function buildModal() {
+  const e = curEvent;
+  if(isCreating) {
+    document.getElementById('mCat').textContent = 'Event Baru';
+    document.getElementById('mName').textContent = 'Tambah Event';
+    document.getElementById('mTags').innerHTML = '';
+    document.getElementById('btnMarkDone').style.display = 'none';
+    document.getElementById('btnDelete').style.display = 'none';
+    document.getElementById('btnEdit').style.display = 'none';
+    document.getElementById('btnSave').style.display = 'block';
+    document.getElementById('btnSave').textContent = 'Buat Event';
+    buildCreateForm();
+    return;
+  }
+  const sc = e.status.toLowerCase();
+  document.getElementById('mCat').textContent = `${e.category} · ${e.q} · Event #${e.id}`;
+  document.getElementById('mName').textContent = e.name;
+  const grp = e.group || '—';
+  document.getElementById('mTags').innerHTML = `
+    <span class="mtag mstatus-tag ${sc}">${e.status}</span>
+    <span class="mtag">${e.dateDisplay} ${e.monthFull} 2026</span>
+    <span class="mtag">${e.category}</span>
+    ${e.pic!=='—'?`<span class="mtag">PIC: ${e.pic}</span>`:''}
+    <span class="mtag">${e.q}</span>
+    <span class="gbadge ${groupBadgeClass(grp)}" style="font-size:10px;padding:4px 12px">${grp==='—'?'Belum Ditandai':grp}</span>`;
+  document.getElementById('btnMarkDone').style.display = e.status==='Upcoming' ? 'block' : 'none';
+  document.getElementById('btnDelete').style.display = 'block';
+  document.getElementById('btnEdit').style.display = 'block';
+  document.getElementById('btnEdit').textContent = isEditing ? 'Batal' : 'Edit';
+  document.getElementById('btnSave').style.display = isEditing ? 'block' : 'none';
+  document.getElementById('btnSave').textContent = 'Simpan';
+  isEditing ? buildEditForm() : buildViewBody();
+}
+
+function buildViewBody() {
+  const e = curEvent;
+  const grp = e.group || '—';
+  document.getElementById('mBody').innerHTML = `
+    <div class="group-assign">
+      <span class="group-assign-label">Kelompok Acara</span>
+      <select class="group-sel" onchange="setGroup(this.value)">
+        <option value="—"${grp==='—'?' selected':''}>— Belum Ditandai</option>
+        <option value="Ignite"${grp==='Ignite'?' selected':''}>🔴 Ignite</option>
+        <option value="Connect"${grp==='Connect'?' selected':''}>⚫ Connect</option>
+      </select>
+    </div>
+    <div class="m-sec">Momentum Pengumuman</div>
+    <textarea class="momentum-ta" id="momentumInput" placeholder="Tulis momentum / pengumuman penting untuk event ini..." onblur="saveMomentum(this.value)">${e.momentum||''}</textarea>
+    <div class="momentum-hint">Teks ini langsung tampil di card depan saat diisi. Klik di luar kotak untuk menyimpan.</div>
+    <div class="m-sec">Deskripsi</div>
+    <div class="m-desc">${e.desc}</div>
+    <div class="m-sec">Agenda</div>
+    <ul class="m-list">${e.agenda.map((a,i)=>`<li><span class="m-num">${i+1}</span><span>${a}</span></li>`).join('')}</ul>
+    <div class="m-sec">Tujuan</div>
+    <ul class="m-list" style="margin-bottom:16px">${e.tujuan.map((t,i)=>`<li><span class="m-num">${i+1}</span><span>${t}</span></li>`).join('')}</ul>
+    ${e.notes?`<div class="m-sec">Catatan</div><div class="m-note">${e.notes}</div>`:''}`;
+}
+
+function buildEditForm() {
+  const e = curEvent;
+  document.getElementById('mBody').innerHTML = `
+    <div class="m-sec">Info Event</div>
+    <input class="ef" id="eName" value="${e.name.replace(/"/g,'&quot;')}" placeholder="Nama Event">
+    <div class="ef-row" style="margin-bottom:4px">
+      <input class="ef" id="eDate" type="date" value="${e.date}" onchange="previewDate()" placeholder="Tanggal" style="flex:1.4">
+      <input class="ef" id="eDisplay" value="${e.dateDisplay.replace(/"/g,'&quot;')}" placeholder="Tampilan (mis. 6–8)" style="flex:1">
+    </div>
+    <div id="dateDerived" style="${e.date?'display:block':'display:none'};font-size:11px;font-weight:700;color:#16a34a;padding:2px 2px 10px;letter-spacing:.3px">${e.date?'→ '+dateToMeta(e.date).q+' · '+dateToMeta(e.date).monthFull+' · '+dateToMeta(e.date).dateDisplay:''}</div>
+    <div class="ef-row" style="margin-bottom:8px">
+      <select class="ef" id="eStat">
+        <option value="Upcoming"${e.status==='Upcoming'?' selected':''}>Upcoming</option>
+        <option value="Done"${e.status==='Done'?' selected':''}>Done</option>
+        <option value="Cancelled"${e.status==='Cancelled'?' selected':''}>Cancelled</option>
+      </select>
+      <select class="ef" id="eGroup">
+        <option value="—"${(e.group||'—')==='—'?' selected':''}>— Belum Ditandai</option>
+        <option value="Ignite"${e.group==='Ignite'?' selected':''}>🔴 Ignite</option>
+        <option value="Connect"${e.group==='Connect'?' selected':''}>⚫ Connect</option>
+      </select>
+    </div>
+    <input class="ef" id="ePIC" value="${e.pic}" placeholder="PIC">
+    <div class="m-sec">Deskripsi</div>
+    <textarea class="ef ef-ta" id="eDesc" rows="3">${e.desc}</textarea>
+    <div class="m-sec">Agenda — satu poin per baris</div>
+    <textarea class="ef ef-ta" id="eAgenda" rows="5">${e.agenda.join('\n')}</textarea>
+    <div class="m-sec">Tujuan — satu poin per baris</div>
+    <textarea class="ef ef-ta" id="eTujuan" rows="4">${e.tujuan.join('\n')}</textarea>
+    <div class="m-sec">Catatan</div>
+    <textarea class="ef ef-ta" id="eNotes" rows="2">${e.notes||''}</textarea>
+    <div class="m-sec" style="margin-top:8px">Momentum Pengumuman</div>
+    <textarea class="ef ef-ta" id="eMomentum" rows="2" placeholder="Tulis momentum / pengumuman penting...">${e.momentum||''}</textarea>`;
+}
+
+function saveMomentum(val) {
+  const i = events.findIndex(e=>e.id===curEvent.id);
+  events[i].momentum = val.trim(); curEvent = events[i];
+  persist(); render();
+}
+
+function setGroup(val) {
+  const i = events.findIndex(e=>e.id===curEvent.id);
+  events[i].group = val; curEvent = events[i];
+  persist(); buildModal(); render();
+}
+
+const MONTH_OPTS = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'];
+const MONTH_FULL_MAP = {JAN:'Januari',FEB:'Februari',MAR:'Maret',APR:'April',MEI:'Mei',JUN:'Juni',JUL:'Juli',AGS:'Agustus',SEPT:'September',OKT:'Oktober',NOV:'November',DES:'Desember'};
+const CAT_OPTS = ['BOP','SPECIAL MONDAY','ROAD TO IDEASCAPE','LEADERS MEETING','TRIP','OUTING','CORE','ROAD TO AAB','MAJOR EVENT','SUMMIT','SPORT'];
+
+function dateToMeta(dateStr) {
+  if(!dateStr) return {q:'Q1',month:'JAN',dateDisplay:'',monthFull:'Januari'};
+  const d = new Date(dateStr + 'T00:00:00');
+  const mi = d.getMonth();
+  const months  = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'];
+  const mFulls  = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const qs      = ['Q1','Q1','Q1','Q2','Q2','Q2','Q3','Q3','Q3','Q4','Q4','Q4'];
+  return { q:qs[mi], month:months[mi], dateDisplay:String(d.getDate()), monthFull:mFulls[mi] };
+}
+
+function previewDate() {
+  const val = document.getElementById('eDate').value;
+  const el  = document.getElementById('dateDerived');
+  const dispEl = document.getElementById('eDisplay');
+  if(!el) return;
+  if(val) {
+    const m = dateToMeta(val);
+    el.textContent = `→ ${m.q}  ·  ${m.monthFull}  ·  ${m.dateDisplay}`;
+    el.style.display = 'block';
+    if(dispEl && !dispEl.value) dispEl.value = m.dateDisplay;
+  } else {
+    el.textContent = '';
+    el.style.display = 'none';
+  }
+}
+
+function buildCreateForm() {
+  document.getElementById('mBody').innerHTML = `
+    <div class="m-sec">Tanggal Event</div>
+    <div class="ef-row" style="margin-bottom:4px">
+      <input class="ef" id="eDate" type="date" onchange="previewDate()" placeholder="Pilih tanggal *" style="flex:1.4">
+      <input class="ef" id="eDisplay" placeholder="Tampilan (mis. 6–8)" style="flex:1">
+    </div>
+    <div id="dateDerived" style="display:none;font-size:11px;font-weight:700;color:#16a34a;padding:2px 2px 12px;letter-spacing:.3px"></div>
+    <div class="m-sec">Nama Event</div>
+    <input class="ef" id="eName" placeholder="Nama Event *" style="margin-bottom:8px">
+    <div class="ef-row" style="margin-bottom:8px">
+      <select class="ef" id="eCat">
+        ${CAT_OPTS.map(c=>`<option value="${c}">${c}</option>`).join('')}
+      </select>
+      <select class="ef" id="eGroup">
+        <option value="—">— Belum Ditandai</option>
+        <option value="Ignite">🔴 Ignite</option>
+        <option value="Connect">⚫ Connect</option>
+      </select>
+    </div>
+    <div class="ef-row" style="margin-bottom:8px">
+      <select class="ef" id="eStat">
+        <option value="Upcoming">Upcoming</option>
+        <option value="Done">Done</option>
+      </select>
+      <input class="ef" id="ePIC" placeholder="PIC (nama)">
+    </div>
+    <div class="m-sec" style="margin-top:4px">Momentum Pengumuman</div>
+    <textarea class="ef ef-ta" id="eMomentum" rows="2" placeholder="Tampil langsung di card..."></textarea>
+    <div class="m-sec">Deskripsi</div>
+    <textarea class="ef ef-ta" id="eDesc" rows="3" placeholder="Deskripsi singkat event..."></textarea>
+    <div class="m-sec">Agenda — satu poin per baris</div>
+    <textarea class="ef ef-ta" id="eAgenda" rows="4" placeholder="Poin agenda 1&#10;Poin agenda 2"></textarea>
+    <div class="m-sec">Tujuan — satu poin per baris</div>
+    <textarea class="ef ef-ta" id="eTujuan" rows="3" placeholder="Tujuan 1&#10;Tujuan 2"></textarea>
+    <div class="m-sec">Catatan</div>
+    <textarea class="ef ef-ta" id="eNotes" rows="2" placeholder="Catatan tambahan..."></textarea>`;
+}
+
+function saveNewEvent() {
+  const name = document.getElementById('eName').value.trim();
+  const dateVal = document.getElementById('eDate').value;
+  if(!name) { showToast('Nama event wajib diisi'); return; }
+  if(!dateVal) { showToast('Tanggal wajib diisi'); return; }
+  const meta = dateToMeta(dateVal);
+  const displayVal = document.getElementById('eDisplay').value.trim() || meta.dateDisplay;
+  const newId = events.length ? Math.max(...events.map(e=>e.id)) + 1 : 1;
+  const newEvent = {
+    id: newId,
+    q: meta.q, month: meta.month, monthFull: meta.monthFull,
+    date: dateVal,
+    dateDisplay: displayVal,
+    name,
+    category: document.getElementById('eCat').value,
+    pic: document.getElementById('ePIC').value.trim() || '—',
+    group: document.getElementById('eGroup').value,
+    status: document.getElementById('eStat').value,
+    momentum: document.getElementById('eMomentum').value.trim(),
+    desc: document.getElementById('eDesc').value.trim(),
+    agenda: document.getElementById('eAgenda').value.split('\n').map(l=>l.trim()).filter(Boolean),
+    tujuan: document.getElementById('eTujuan').value.split('\n').map(l=>l.trim()).filter(Boolean),
+    notes: document.getElementById('eNotes').value.trim()
+  };
+  events.push(newEvent);
+  persist(); closeModal(); render();
+  showToast('Event berhasil dibuat');
+}
+
+function toggleEdit() { isEditing = !isEditing; buildModal(); }
+function markDone() {
+  const i = events.findIndex(e=>e.id===curEvent.id);
+  events[i].status = 'Done'; curEvent = events[i];
+  persist(); buildModal(); render();
+}
+function saveEdit() {
+  if(isCreating) { saveNewEvent(); return; }
+  const i = events.findIndex(e=>e.id===curEvent.id);
+  events[i].name = document.getElementById('eName').value.trim();
+  const newDate = document.getElementById('eDate').value;
+  if(newDate) {
+    const m = dateToMeta(newDate);
+    events[i].date = newDate;
+    events[i].q = m.q;
+    events[i].month = m.month;
+    events[i].monthFull = m.monthFull;
+    const disp = document.getElementById('eDisplay').value.trim();
+    events[i].dateDisplay = disp || m.dateDisplay;
+  } else {
+    events[i].dateDisplay = document.getElementById('eDisplay').value.trim();
+  }
+  events[i].status = document.getElementById('eStat').value;
+  events[i].group = document.getElementById('eGroup').value;
+  events[i].pic = document.getElementById('ePIC').value.trim();
+  events[i].desc = document.getElementById('eDesc').value.trim();
+  events[i].agenda = document.getElementById('eAgenda').value.split('\n').map(l=>l.trim()).filter(Boolean);
+  events[i].tujuan = document.getElementById('eTujuan').value.split('\n').map(l=>l.trim()).filter(Boolean);
+  events[i].notes = document.getElementById('eNotes').value.trim();
+  events[i].momentum = document.getElementById('eMomentum').value.trim();
+  curEvent = events[i]; isEditing = false;
+  persist(); buildModal(); render();
+}
+
+// ═══════════════════════════ EXPORT ═══════════════════════════
+function exportCSV() {
+  const h = ['ID','Q','MONTH','DATE','NAME','CATEGORY','PIC','STATUS','DESC'];
+  const rows = events.map(e=>[e.id,e.q,e.month,e.date,e.name,e.category,e.pic,e.status,e.desc].map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(','));
+  const blob = new Blob([[h.join(','),...rows].join('\n')],{type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='ignitex-special-2026.csv'; a.click();
+}
+
+// ═══════════════════════════ TOAST ═══════════════════════════
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+// ═══════════════════════════ KEYS & EVENTS ═══════════════════════════
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+document.getElementById('searchInput').addEventListener('input', e => { searchQ = e.target.value; render(); });
+
+// ═══════════════════════════ INIT ═══════════════════════════
+load(); render();
+</script>
+</body>
+</html>
