@@ -237,10 +237,6 @@ main { max-width:1440px; margin:0 auto; padding:32px 32px 64px; }
 /* ═══ ADMIN VISIBILITY ═══ */
 .admin-only { display:none !important; }
 body.is-admin .admin-only { display:inline-flex !important; }
-.viewer-bar { background:var(--gray-100); border-bottom:1px solid var(--gray-200); padding:7px 32px; font-size:11px; color:var(--gray-400); display:flex; align-items:center; justify-content:space-between; }
-.viewer-bar b { color:var(--gray-600); }
-.viewer-bar button { background:none; border:1px solid var(--gray-300); border-radius:100px; padding:4px 14px; font-size:10px; font-weight:700; color:var(--gray-600); cursor:pointer; font-family:inherit; letter-spacing:.5px; text-transform:uppercase; transition:all .2s; }
-.viewer-bar button:hover { border-color:var(--black); color:var(--black); }
 .admin-badge { font-size:10px; font-weight:800; letter-spacing:1px; text-transform:uppercase; background:rgba(22,163,74,.15); color:#16a34a; border:1px solid rgba(22,163,74,.3); padding:4px 12px; border-radius:100px; }
 .login-overlay { position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:300; display:flex; align-items:center; justify-content:center; padding:24px; opacity:0; pointer-events:none; transition:opacity .2s; backdrop-filter:blur(3px); }
 .login-overlay.open { opacity:1; pointer-events:all; }
@@ -286,16 +282,15 @@ body.is-admin .admin-only { display:inline-flex !important; }
       </div>
       <button class="hbtn" onclick="exportCSV()">Export CSV</button>
       <button class="hbtn hbtn-red admin-only" onclick="openCreateModal()">+ Tambah Event</button>
-      <span class="admin-badge admin-only" id="adminBadge">✓ Admin</span>
-      <span id="syncWrap"><span class="sync-dot"></span></span>
+      <span class="sync-dot" id="syncDot"></span>
+      <span class="admin-badge" id="adminBadge" style="display:none">● Admin</span>
+      <button class="hbtn hbtn-red" id="btnLogin" onclick="openLoginModal()">🔐 Admin</button>
       <button class="hbtn" id="btnLogout" onclick="doLogout()" style="display:none">Logout</button>
-      <button class="hbtn hbtn-red" id="btnLogin" onclick="openLoginModal()">Login Admin</button>
     </div>
   </div>
   <div class="progress-strip"><div class="progress-fill" id="progressFill"></div></div>
 </header>
 
-<div class="viewer-bar" id="viewerBar"><span>Mode: <b>View Only</b> — Login untuk edit & kelola event</span><button onclick="openLoginModal()">Login Admin</button></div>
 <div class="loading-wrap" id="loadingWrap"><div class="spinner"></div><br><br><span style="font-size:12px;color:var(--gray-400)">Memuat data...</span></div>
 <div class="timeline-strip">
   <div class="timeline-inner" id="timelineStrip"></div>
@@ -1136,8 +1131,7 @@ function activateAdmin(notify = true) {
   document.getElementById('btnLogin').style.display   = 'none';
   document.getElementById('btnLogout').style.display  = 'inline-flex';
   document.getElementById('adminBadge').style.display = 'inline-flex';
-  document.getElementById('viewerBar').style.display  = 'none';
-  if (notify) showToast('Login berhasil — mode Admin aktif');
+  if (notify) showToast('✓ Login berhasil — mode Admin aktif');
   render();
 }
 
@@ -1148,9 +1142,8 @@ function doLogout() {
   document.getElementById('btnLogin').style.display   = 'inline-flex';
   document.getElementById('btnLogout').style.display  = 'none';
   document.getElementById('adminBadge').style.display = 'none';
-  document.getElementById('viewerBar').style.display  = 'flex';
   if (isEditing || isCreating) closeModal();
-  showToast('Logged out');
+  showToast('✓ Logged out');
   render();
 }
 
@@ -1191,7 +1184,7 @@ function handleLoginOverlayClick(e) { if (e.target === document.getElementById('
 // SYNC DOT
 // ════════════════════════════════════════════════
 function setSyncDot(state) {
-  const dot = document.querySelector('.sync-dot');
+  const dot = document.getElementById('syncDot');
   if (!dot) return;
   dot.className = 'sync-dot' + (state ? ' ' + state : '');
   if (state === 'saved') setTimeout(() => { if(dot.classList.contains('saved')) dot.className='sync-dot'; }, 3000);
