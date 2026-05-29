@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>2026 SPECIAL EVENT — IgniteX</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 :root {
@@ -226,44 +225,6 @@ main { max-width:1440px; margin:0 auto; padding:32px 32px 64px; }
 ::-webkit-scrollbar-track { background:var(--gray-100); }
 ::-webkit-scrollbar-thumb { background:var(--gray-300); border-radius:3px; }
 
-/* ═══ ADMIN VISIBILITY ═══ */
-.admin-only { display:none !important; }
-body.is-admin .admin-only { display:block !important; }
-body.is-admin .admin-only-flex { display:inline-flex !important; }
-.admin-only-flex { display:none !important; }
-/* Admin badge */
-.admin-badge { font-size:10px; font-weight:800; letter-spacing:1px; text-transform:uppercase; background:rgba(22,163,74,.15); color:#16a34a; border:1px solid rgba(22,163,74,.3); padding:4px 12px; border-radius:100px; }
-/* Login modal */
-.login-overlay { position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:300; display:flex; align-items:center; justify-content:center; padding:24px; opacity:0; pointer-events:none; transition:opacity .2s; backdrop-filter:blur(3px); }
-.login-overlay.open { opacity:1; pointer-events:all; }
-.login-box { background:var(--white); border-radius:12px; width:100%; max-width:380px; padding:32px; box-shadow:0 24px 60px rgba(0,0,0,.2); }
-.login-logo { display:flex; justify-content:center; margin-bottom:20px; }
-.login-logo img { height:28px; }
-.login-title { font-size:18px; font-weight:800; color:var(--black); text-align:center; margin-bottom:4px; }
-.login-sub { font-size:12px; color:var(--gray-400); text-align:center; margin-bottom:24px; }
-.login-label { font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:var(--gray-600); margin-bottom:5px; display:block; }
-.login-input { width:100%; border:1.5px solid var(--gray-200); border-radius:7px; padding:10px 13px; font-size:13px; font-family:inherit; color:var(--black); outline:none; transition:border-color .2s; margin-bottom:14px; }
-.login-input:focus { border-color:var(--black); }
-.login-btn { width:100%; background:var(--black); border:none; color:var(--white); font-size:13px; font-weight:700; font-family:inherit; padding:11px; border-radius:7px; cursor:pointer; transition:background .2s; margin-top:4px; letter-spacing:.5px; }
-.login-btn:hover { background:#333; }
-.login-btn:disabled { background:var(--gray-300); cursor:not-allowed; }
-.login-err { font-size:12px; color:var(--red); margin-top:8px; text-align:center; display:none; }
-.login-close { position:absolute; top:12px; right:12px; background:var(--gray-100); border:none; border-radius:6px; color:var(--gray-600); cursor:pointer; font-size:14px; padding:5px 9px; }
-/* Config banner */
-.config-banner { background:#fffbeb; border:1.5px solid #f59e0b; border-radius:10px; padding:20px 24px; margin:24px 32px; }
-.config-banner h3 { font-size:14px; font-weight:800; color:#92400e; margin-bottom:8px; }
-.config-banner p { font-size:12px; color:#78350f; line-height:1.7; }
-.config-banner code { background:#fef3c7; padding:2px 6px; border-radius:4px; font-size:11px; }
-/* Loading state */
-.loading-state { text-align:center; padding:60px 24px; color:var(--gray-400); }
-.loading-state .spin { display:inline-block; width:24px; height:24px; border:2px solid var(--gray-200); border-top-color:var(--black); border-radius:50%; animation:spin .7s linear infinite; margin-bottom:12px; }
-@keyframes spin { to { transform:rotate(360deg); } }
-/* Viewer notice */
-.viewer-bar { background:var(--gray-100); border-bottom:1px solid var(--gray-200); padding:6px 32px; font-size:11px; color:var(--gray-400); display:flex; align-items:center; justify-content:space-between; }
-.viewer-bar span { font-weight:600; }
-.viewer-bar button { background:none; border:1px solid var(--gray-300); border-radius:100px; padding:3px 12px; font-size:10px; font-weight:700; color:var(--gray-600); cursor:pointer; font-family:inherit; letter-spacing:.5px; text-transform:uppercase; transition:all .2s; }
-.viewer-bar button:hover { border-color:var(--black); color:var(--black); }
-
 @media(max-width:768px){
   .header-inner{padding:0 16px}
   .header-stats{display:none}
@@ -272,6 +233,38 @@ body.is-admin .admin-only-flex { display:inline-flex !important; }
   main{padding:20px 16px 48px}
   .event-grid{grid-template-columns:1fr}
 }
+
+/* ═══ ADMIN VISIBILITY ═══ */
+.admin-only { display:none !important; }
+body.is-admin .admin-only { display:inline-flex !important; }
+.viewer-bar { background:var(--gray-100); border-bottom:1px solid var(--gray-200); padding:7px 32px; font-size:11px; color:var(--gray-400); display:flex; align-items:center; justify-content:space-between; }
+.viewer-bar b { color:var(--gray-600); }
+.viewer-bar button { background:none; border:1px solid var(--gray-300); border-radius:100px; padding:4px 14px; font-size:10px; font-weight:700; color:var(--gray-600); cursor:pointer; font-family:inherit; letter-spacing:.5px; text-transform:uppercase; transition:all .2s; }
+.viewer-bar button:hover { border-color:var(--black); color:var(--black); }
+.admin-badge { font-size:10px; font-weight:800; letter-spacing:1px; text-transform:uppercase; background:rgba(22,163,74,.15); color:#16a34a; border:1px solid rgba(22,163,74,.3); padding:4px 12px; border-radius:100px; }
+.login-overlay { position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:300; display:flex; align-items:center; justify-content:center; padding:24px; opacity:0; pointer-events:none; transition:opacity .2s; backdrop-filter:blur(3px); }
+.login-overlay.open { opacity:1; pointer-events:all; }
+.login-box { background:var(--white); border-radius:12px; width:100%; max-width:360px; padding:32px; box-shadow:0 24px 60px rgba(0,0,0,.2); position:relative; }
+.login-logo { display:flex; justify-content:center; margin-bottom:20px; }
+.login-logo img { height:28px; }
+.login-title { font-size:18px; font-weight:800; color:var(--black); text-align:center; margin-bottom:4px; }
+.login-sub { font-size:12px; color:var(--gray-400); text-align:center; margin-bottom:24px; }
+.login-label { font-size:10px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; color:var(--gray-600); margin-bottom:5px; display:block; }
+.login-input { width:100%; border:1.5px solid var(--gray-200); border-radius:7px; padding:10px 13px; font-size:13px; font-family:inherit; color:var(--black); outline:none; transition:border-color .2s; margin-bottom:14px; }
+.login-input:focus { border-color:var(--black); }
+.login-btn { width:100%; background:var(--black); border:none; color:var(--white); font-size:13px; font-weight:700; font-family:inherit; padding:11px; border-radius:7px; cursor:pointer; transition:background .2s; letter-spacing:.5px; }
+.login-btn:hover { background:#333; }
+.login-btn:disabled { background:var(--gray-300); cursor:not-allowed; }
+.login-err { font-size:12px; color:var(--red); margin-top:10px; text-align:center; min-height:18px; }
+.login-close { position:absolute; top:14px; right:14px; background:var(--gray-100); border:none; border-radius:6px; color:var(--gray-600); cursor:pointer; font-size:14px; padding:5px 9px; }
+.sync-dot { width:7px; height:7px; border-radius:50%; background:var(--gray-300); display:inline-block; margin-right:4px; transition:background .3s; }
+.sync-dot.syncing { background:#f59e0b; animation:blink .8s ease-in-out infinite; }
+.sync-dot.saved { background:#16a34a; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+.loading-wrap { display:none; padding:60px 24px; text-align:center; }
+.loading-wrap.show { display:block; }
+.spinner { display:inline-block; width:22px; height:22px; border:2px solid var(--gray-200); border-top-color:var(--black); border-radius:50%; animation:spin .7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -293,7 +286,8 @@ body.is-admin .admin-only-flex { display:inline-flex !important; }
       </div>
       <button class="hbtn" onclick="exportCSV()">Export CSV</button>
       <button class="hbtn hbtn-red admin-only" onclick="openCreateModal()">+ Tambah Event</button>
-      <span class="admin-badge admin-only-flex" id="adminBadge" style="display:none">Admin</span>
+      <span class="admin-badge admin-only" id="adminBadge">✓ Admin</span>
+      <span id="syncWrap"><span class="sync-dot"></span></span>
       <button class="hbtn" id="btnLogout" onclick="doLogout()" style="display:none">Logout</button>
       <button class="hbtn hbtn-red" id="btnLogin" onclick="openLoginModal()">Login Admin</button>
     </div>
@@ -301,25 +295,8 @@ body.is-admin .admin-only-flex { display:inline-flex !important; }
   <div class="progress-strip"><div class="progress-fill" id="progressFill"></div></div>
 </header>
 
-<!-- VIEWER BAR -->
-<div class="viewer-bar" id="viewerBar">
-  <span>Mode: <b>View Only</b> — Login sebagai admin untuk edit</span>
-  <button onclick="openLoginModal()">Login Admin</button>
-</div>
-
-<!-- CONFIG BANNER -->
-<div class="config-banner" id="configBanner" style="display:none">
-  <h3>⚙️ Setup diperlukan</h3>
-  <p>Buka <code>app.html</code>, isi konstanta <code>SUPABASE_URL</code> dan <code>SUPABASE_ANON_KEY</code> dengan kredensial Supabase project kamu.<br>
-  Ambil dari: <code>supabase.com → Project → Settings → API</code>.<br>
-  Lalu jalankan SQL di <code>supabase/migrations/001_init.sql</code> di Supabase SQL Editor.</p>
-</div>
-
-<!-- LOADING -->
-<div class="loading-state" id="loadingState" style="display:none">
-  <div class="spin"></div><br>Memuat data...
-</div>
-
+<div class="viewer-bar" id="viewerBar"><span>Mode: <b>View Only</b> — Login untuk edit & kelola event</span><button onclick="openLoginModal()">Login Admin</button></div>
+<div class="loading-wrap" id="loadingWrap"><div class="spinner"></div><br><br><span style="font-size:12px;color:var(--gray-400)">Memuat data...</span></div>
 <div class="timeline-strip">
   <div class="timeline-inner" id="timelineStrip"></div>
 </div>
@@ -370,12 +347,12 @@ body.is-admin .admin-only-flex { display:inline-flex !important; }
     <div class="modal-body" id="mBody"></div>
     <div class="modal-ftr">
       <div class="mftr-l">
-        <button class="mbtn mbtn-done" id="btnMarkDone" onclick="markDone()" style="display:none">Tandai Done</button>
-        <button class="mbtn mbtn-delete" id="btnDelete" onclick="deleteEvent()" style="display:none">Hapus</button>
+        <button class="mbtn mbtn-done" id="btnMarkDone" onclick="markDone()" style="display:none" class="mbtn mbtn-done admin-only">Tandai Done</button>
+        <button class="mbtn mbtn-delete" id="btnDelete" onclick="deleteEvent()" style="display:none" class="mbtn mbtn-delete admin-only">Hapus</button>
       </div>
       <div class="mftr-r">
         <button class="mbtn mbtn-ghost" onclick="closeModal()">Tutup</button>
-        <button class="mbtn mbtn-edit" id="btnEdit" onclick="toggleEdit()">Edit</button>
+        <button class="mbtn mbtn-edit" id="btnEdit" onclick="toggleEdit()" style="display:none">Edit</button>
         <button class="mbtn mbtn-save" id="btnSave" onclick="saveEdit()" style="display:none">Simpan</button>
       </div>
     </div>
@@ -384,15 +361,13 @@ body.is-admin .admin-only-flex { display:inline-flex !important; }
 
 <!-- LOGIN MODAL -->
 <div class="login-overlay" id="loginOverlay" onclick="handleLoginOverlayClick(event)">
-  <div class="login-box" style="position:relative">
+  <div class="login-box">
     <button class="login-close" onclick="closeLoginModal()">✕</button>
     <div class="login-logo"><img src="ignitex-logo.png" alt="IgniteX"></div>
     <div class="login-title">Admin Login</div>
     <div class="login-sub">Masuk untuk mengelola event</div>
-    <label class="login-label">Email</label>
-    <input class="login-input" id="loginEmail" type="email" placeholder="admin@ignitex.com" autocomplete="email">
-    <label class="login-label">Password</label>
-    <input class="login-input" id="loginPassword" type="password" placeholder="••••••••" autocomplete="current-password"
+    <label class="login-label">Password Admin</label>
+    <input class="login-input" id="loginPassword" type="password" placeholder="••••••••"
       onkeydown="if(event.key==='Enter') doLogin()">
     <button class="login-btn" id="btnLoginSubmit" onclick="doLogin()">Login</button>
     <div class="login-err" id="loginErr"></div>
@@ -402,18 +377,9 @@ body.is-admin .admin-only-flex { display:inline-flex !important; }
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════════════════════════
-// CONFIG — Isi dengan kredensial dari supabase.com → Settings → API
-// ═══════════════════════════════════════════════════════════
-const SUPABASE_URL      = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
-// ═══════════════════════════════════════════════════════════
-
-let sb = null, isAdmin = false;
-
-function isConfigured() { return SUPABASE_URL !== 'YOUR_SUPABASE_URL'; }
-
-// ═══════════════════════════ DATA ═══════════════════════════
+// ════════════════════════════════════════════════
+// DEFAULT DATA (fallback reference)
+// ════════════════════════════════════════════════
 const DEFAULT = [
   // ─── Q1 ───
   {id:1,q:'Q1',month:'JAN',date:'2026-01-25',dateDisplay:'25',monthFull:'Januari',name:'BOP (Gacha Angpao)',category:'BOP',pic:'—',status:'Done',
@@ -618,149 +584,18 @@ const DEFAULT = [
     notes:'PIC: Jeshua. Undang keluarga. Dress code: formal.'}
 ];
 
-// ═══════════════════════════ STATE ═══════════════════════════
-let events = [], filterQ = 'ALL', filterS = 'all', filterG = 'ALL', searchQ = '', curEvent = null, isEditing = false, isCreating = false;
 
-const QUARTER_LABELS = {Q1:'Januari — Maret',Q2:'April — Juni',Q3:'Juli — September',Q4:'Oktober — Desember'};
-const MONTHS_ORDER = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'];
-const MONTHS_FULL = {JAN:'Januari',FEB:'Februari',MAR:'Maret',APR:'April',MEI:'Mei',JUN:'Juni',JUL:'Juli',AGS:'Agustus',SEPT:'September',OKT:'Oktober',NOV:'November',DES:'Desember'};
-const CAT_CLASS = {BOP:'bop','SPECIAL MONDAY':'','ROAD TO IDEASCAPE':'trip','LEADERS MEETING':'','TRIP':'trip','OUTING':'','CORE':'core','ROAD TO AAB':'','MAJOR EVENT':'major','SUMMIT':'summit','SPORT':''};
+// ════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════
+let events = [], filterQ = 'ALL', filterS = 'all', filterG = 'ALL', searchQ = '';
+let curEvent = null, isEditing = false, isCreating = false;
+let isAdmin = false, adminPass = sessionStorage.getItem('igx_pass') || '';
+let lastHash = '';
 
-// ─── INIT ───
-window.addEventListener('DOMContentLoaded', async () => {
-  if (!isConfigured()) {
-    document.getElementById('loadingState').style.display = 'none';
-    document.getElementById('configBanner').style.display = 'block';
-    document.getElementById('viewerBar').style.display = 'none';
-    document.getElementById('timelineStrip').closest('.timeline-strip').style.display = 'none';
-    document.getElementById('filterBar').closest('.filter-bar').style.display = 'none';
-    document.getElementById('mainContent').style.display = 'none';
-    return;
-  }
-  sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  sb.auth.onAuthStateChange((_event, session) => {
-    isAdmin = !!session;
-    updateAuthUI(session);
-    if (events.length) render();
-  });
-  await checkAuth();
-  await loadData();
-  setupRealtime();
-});
-
-// ─── DATA ───
-async function loadData() {
-  document.getElementById('loadingState').style.display = 'block';
-  document.getElementById('eventsContainer').innerHTML = '';
-  const { data, error } = await sb.from('events').select('id, payload').order('id');
-  document.getElementById('loadingState').style.display = 'none';
-  if (error) { showToast('Error: ' + error.message); return; }
-  if (!data || !data.length) {
-    if (isAdmin) {
-      document.getElementById('emptyState').innerHTML = `
-        <div class="empty-title">Database masih kosong</div>
-        <div class="empty-sub">Klik tombol di bawah untuk import 31 event default 2026</div>
-        <button class="mbtn mbtn-save" style="margin-top:16px;display:inline-block" onclick="seedDefault()">Import Default Data (31 Events)</button>`;
-      document.getElementById('emptyState').style.display = 'block';
-    } else {
-      document.getElementById('emptyState').innerHTML = `<div class="empty-title">Belum ada event</div>`;
-      document.getElementById('emptyState').style.display = 'block';
-    }
-    return;
-  }
-  events = data.map(r => ({ ...r.payload, _rowId: r.id }));
-  events.forEach(e => { if(!e.group) e.group='—'; if(e.momentum===undefined) e.momentum=''; });
-  render();
-}
-
-async function upsertEvent(ev) {
-  const payload = { ...ev };
-  delete payload._rowId;
-  const { error } = await sb.from('events').upsert({ id: ev.id, payload });
-  if (error) { showToast('Gagal simpan: ' + error.message); return false; }
-  showToast('Tersimpan');
-  return true;
-}
-
-async function deleteFromDB(id) {
-  const { error } = await sb.from('events').delete().eq('id', id);
-  if (error) { showToast('Gagal hapus: ' + error.message); return false; }
-  return true;
-}
-
-async function seedDefault() {
-  if (!confirm('Import 31 event default ke database?')) return;
-  showToast('Importing...');
-  const rows = DEFAULT.map(e => ({ id: e.id, payload: { ...e, group: e.group||'—', momentum: e.momentum||'' } }));
-  const { error } = await sb.from('events').upsert(rows);
-  if (error) { showToast('Error: ' + error.message); return; }
-  showToast('Import berhasil!');
-  await loadData();
-}
-
-// ─── REALTIME ───
-function setupRealtime() {
-  sb.channel('events-live')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'events' }, payload => {
-      const { eventType, new: n, old: o } = payload;
-      if (eventType === 'INSERT' || eventType === 'UPDATE') {
-        const ev = { ...n.payload, _rowId: n.id };
-        if(!ev.group) ev.group='—'; if(ev.momentum===undefined) ev.momentum='';
-        const idx = events.findIndex(e => e.id === n.id);
-        idx >= 0 ? events[idx] = ev : events.push(ev);
-        events.sort((a, b) => a.date.localeCompare(b.date));
-        if (curEvent && curEvent.id === n.id && !isEditing) { curEvent = ev; buildModal(); }
-      } else if (eventType === 'DELETE') {
-        events = events.filter(e => e.id !== o.id);
-      }
-      render();
-    }).subscribe();
-}
-
-// ─── AUTH ───
-async function checkAuth() {
-  const { data: { session } } = await sb.auth.getSession();
-  isAdmin = !!session;
-  updateAuthUI(session);
-}
-
-function updateAuthUI(session) {
-  const loggedIn = !!session;
-  document.getElementById('btnLogin').style.display    = loggedIn ? 'none' : 'inline-flex';
-  document.getElementById('btnLogout').style.display   = loggedIn ? 'inline-flex' : 'none';
-  document.getElementById('adminBadge').style.display  = loggedIn ? 'inline-flex' : 'none';
-  document.getElementById('viewerBar').style.display   = loggedIn ? 'none' : 'flex';
-  document.body.classList.toggle('is-admin', loggedIn);
-}
-
-async function doLogin() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const pass  = document.getElementById('loginPassword').value;
-  const btn   = document.getElementById('btnLoginSubmit');
-  const err   = document.getElementById('loginErr');
-  err.style.display = 'none';
-  if (!email || !pass) { err.textContent='Isi email dan password'; err.style.display='block'; return; }
-  btn.disabled = true; btn.textContent = 'Loading…';
-  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
-  btn.disabled = false; btn.textContent = 'Login';
-  if (error) { err.textContent = error.message; err.style.display = 'block'; return; }
-  closeLoginModal();
-  showToast('Login berhasil — mode Admin aktif');
-}
-
-async function doLogout() {
-  await sb.auth.signOut();
-  if (isEditing) { isEditing = false; closeModal(); }
-  showToast('Logged out');
-}
-
-function openLoginModal() {
-  document.getElementById('loginOverlay').classList.add('open');
-  setTimeout(() => document.getElementById('loginEmail').focus(), 100);
-}
-function closeLoginModal() { document.getElementById('loginOverlay').classList.remove('open'); }
-function handleLoginOverlayClick(e) { if (e.target === document.getElementById('loginOverlay')) closeLoginModal(); }
-
+// ════════════════════════════════════════════════
+// CONSTANTS & HELPERS (layout, filters, render)
+// ════════════════════════════════════════════════
 // ═══════════════════════════ FILTER ═══════════════════════════
 function setFilter(type, val, el) {
   if(type==='q') { filterQ=val; document.querySelectorAll('[id^="fq-"]').forEach(b=>b.classList.remove('active')); el.classList.add('active'); }
@@ -925,8 +760,9 @@ function closeModal() {
 async function deleteEvent() {
   if(!curEvent) return;
   if(!confirm(`Hapus event "${curEvent.name}"? Tindakan ini tidak bisa dibatalkan.`)) return;
-  const ok = await deleteFromDB(curEvent.id);
-  if(ok) { events = events.filter(e=>e.id!==curEvent.id); closeModal(); render(); showToast('Event dihapus'); }
+  events = events.filter(e=>e.id!==curEvent.id);
+  await saveEvents(); closeModal(); render();
+  showToast('Event dihapus');
 }
 function handleOverlayClick(ev) { if(ev.target===document.getElementById('overlay')) closeModal(); }
 
@@ -1026,13 +862,13 @@ function buildEditForm() {
 async function saveMomentum(val) {
   const i = events.findIndex(e=>e.id===curEvent.id);
   events[i].momentum = val.trim(); curEvent = events[i];
-  await upsertEvent(events[i]); render();
+  await saveEvents(); render();
 }
 
 async function setGroup(val) {
   const i = events.findIndex(e=>e.id===curEvent.id);
   events[i].group = val; curEvent = events[i];
-  await upsertEvent(events[i]); buildModal(); render();
+  await saveEvents(); buildModal(); render();
 }
 
 const MONTH_OPTS = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'];
@@ -1104,7 +940,7 @@ function buildCreateForm() {
     <textarea class="ef ef-ta" id="eNotes" rows="2" placeholder="Catatan tambahan..."></textarea>`;
 }
 
-function saveNewEvent() {
+async function saveNewEvent() {
   const name = document.getElementById('eName').value.trim();
   const dateVal = document.getElementById('eDate').value;
   if(!name) { showToast('Nama event wajib diisi'); return; }
@@ -1129,15 +965,15 @@ function saveNewEvent() {
     notes: document.getElementById('eNotes').value.trim()
   };
   events.push(newEvent);
-  const ok = await upsertEvent(newEvent);
-  if(ok) { closeModal(); render(); showToast('Event berhasil dibuat'); }
+  await saveEvents(); closeModal(); render();
+  showToast('Event berhasil dibuat');
 }
 
 function toggleEdit() { isEditing = !isEditing; buildModal(); }
 async function markDone() {
   const i = events.findIndex(e=>e.id===curEvent.id);
   events[i].status = 'Done'; curEvent = events[i];
-  await upsertEvent(events[i]); buildModal(); render();
+  await saveEvents(); buildModal(); render();
 }
 async function saveEdit() {
   if(isCreating) { saveNewEvent(); return; }
@@ -1164,7 +1000,7 @@ async function saveEdit() {
   events[i].notes = document.getElementById('eNotes').value.trim();
   events[i].momentum = document.getElementById('eMomentum').value.trim();
   curEvent = events[i]; isEditing = false;
-  await upsertEvent(events[i]); buildModal(); render();
+  await saveEvents(); buildModal(); render();
 }
 
 // ═══════════════════════════ EXPORT ═══════════════════════════
@@ -1187,7 +1023,188 @@ function showToast(msg) {
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 document.getElementById('searchInput').addEventListener('input', e => { searchQ = e.target.value; render(); });
 
-// DOMContentLoaded init is handled by the Supabase block above
+// ═══════════════════════════ INIT ═══════════════════════════
+load(); render();
+
+
+// ════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', async () => {
+  await loadEvents();
+  if (adminPass) tryRestoreSession();
+  startPolling();
+});
+
+// ════════════════════════════════════════════════
+// DATA / API
+// ════════════════════════════════════════════════
+async function loadEvents() {
+  setSyncDot('syncing');
+  document.getElementById('loadingWrap').classList.add('show');
+  try {
+    const res = await fetch('/api/events?t=' + Date.now());
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    if (Array.isArray(data)) {
+      events = data;
+      events.forEach(e => { if(!e.group) e.group='—'; if(e.momentum===undefined) e.momentum=''; });
+      lastHash = quickHash();
+      render();
+    }
+  } catch(_) { showToast('Gagal memuat data'); }
+  document.getElementById('loadingWrap').classList.remove('show');
+  setSyncDot('saved');
+}
+
+async function saveEvents() {
+  setSyncDot('syncing');
+  try {
+    const res = await fetch('/api/events', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Password': adminPass },
+      body: JSON.stringify(events)
+    });
+    if (res.status === 401) { doLogout(); showToast('Session habis — silakan login lagi'); return false; }
+    if (!res.ok) { const e = await res.json().catch(()=>({error:'Unknown'})); showToast('Error: ' + e.error); setSyncDot(''); return false; }
+    lastHash = quickHash();
+    showToast('Tersimpan ✓');
+    setSyncDot('saved');
+    return true;
+  } catch(_) { showToast('Gagal menyimpan'); setSyncDot(''); return false; }
+}
+
+function quickHash() {
+  return events.map(e => e.id+e.status+(e.momentum||'')+(e.group||'')+(e.name||'')).join('|');
+}
+
+// ════════════════════════════════════════════════
+// REALTIME POLLING (10s)
+// ════════════════════════════════════════════════
+function startPolling() {
+  setInterval(async () => {
+    if (document.hidden || isEditing || isCreating) return;
+    try {
+      const res = await fetch('/api/events?t=' + Date.now());
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!Array.isArray(data)) return;
+      const newHash = data.map(e => e.id+e.status+(e.momentum||'')+(e.group||'')+(e.name||'')).join('|');
+      if (newHash === lastHash) return;
+      events = data;
+      events.forEach(e => { if(!e.group) e.group='—'; if(e.momentum===undefined) e.momentum=''; });
+      lastHash = newHash;
+      render();
+      if (curEvent && !isEditing) {
+        const upd = events.find(e => e.id === curEvent.id);
+        if (upd) { curEvent = upd; buildModal(); }
+      }
+    } catch(_) {}
+  }, 10000);
+}
+
+// ════════════════════════════════════════════════
+// AUTH
+// ════════════════════════════════════════════════
+async function tryRestoreSession() {
+  // Silent verify: try a write with stored pass
+  try {
+    const res = await fetch('/api/events', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Password': adminPass },
+      body: JSON.stringify(events)
+    });
+    if (res.ok) { activateAdmin(false); lastHash = quickHash(); }
+    else { adminPass = ''; sessionStorage.removeItem('igx_pass'); }
+  } catch(_) {}
+}
+
+function activateAdmin(notify = true) {
+  isAdmin = true;
+  document.body.classList.add('is-admin');
+  document.getElementById('btnLogin').style.display   = 'none';
+  document.getElementById('btnLogout').style.display  = 'inline-flex';
+  document.getElementById('adminBadge').style.display = 'inline-flex';
+  document.getElementById('viewerBar').style.display  = 'none';
+  if (notify) showToast('Login berhasil — mode Admin aktif');
+  render();
+}
+
+function doLogout() {
+  isAdmin = false; adminPass = '';
+  sessionStorage.removeItem('igx_pass');
+  document.body.classList.remove('is-admin');
+  document.getElementById('btnLogin').style.display   = 'inline-flex';
+  document.getElementById('btnLogout').style.display  = 'none';
+  document.getElementById('adminBadge').style.display = 'none';
+  document.getElementById('viewerBar').style.display  = 'flex';
+  if (isEditing || isCreating) closeModal();
+  showToast('Logged out');
+  render();
+}
+
+async function doLogin() {
+  const pass = document.getElementById('loginPassword').value.trim();
+  const btn  = document.getElementById('btnLoginSubmit');
+  const err  = document.getElementById('loginErr');
+  err.textContent = '';
+  if (!pass) { err.textContent = 'Masukkan password'; return; }
+  btn.disabled = true; btn.textContent = 'Memverifikasi...';
+  try {
+    const res = await fetch('/api/events', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Password': pass },
+      body: JSON.stringify(events)
+    });
+    btn.disabled = false; btn.textContent = 'Login';
+    if (res.status === 401) { err.textContent = 'Password salah'; return; }
+    if (!res.ok) { err.textContent = 'Error server, coba lagi'; return; }
+    adminPass = pass;
+    sessionStorage.setItem('igx_pass', pass);
+    closeLoginModal();
+    activateAdmin(true);
+    lastHash = quickHash();
+  } catch(_) { btn.disabled = false; btn.textContent = 'Login'; err.textContent = 'Koneksi error'; }
+}
+
+function openLoginModal() {
+  document.getElementById('loginOverlay').classList.add('open');
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginErr').textContent = '';
+  setTimeout(() => document.getElementById('loginPassword').focus(), 100);
+}
+function closeLoginModal() { document.getElementById('loginOverlay').classList.remove('open'); }
+function handleLoginOverlayClick(e) { if (e.target === document.getElementById('loginOverlay')) closeLoginModal(); }
+
+// ════════════════════════════════════════════════
+// SYNC DOT
+// ════════════════════════════════════════════════
+function setSyncDot(state) {
+  const dot = document.querySelector('.sync-dot');
+  if (!dot) return;
+  dot.className = 'sync-dot' + (state ? ' ' + state : '');
+  if (state === 'saved') setTimeout(() => { if(dot.classList.contains('saved')) dot.className='sync-dot'; }, 3000);
+}
+
+// ════════════════════════════════════════════════
+// buildModal: show/hide admin-only buttons
+// ════════════════════════════════════════════════
+// Override buildModal to gate admin buttons
+const _origBuildModal = buildModal;
+function buildModal() {
+  _origBuildModal();
+  // Show edit/delete/done only for admin (non-create mode)
+  if (!isCreating) {
+    document.getElementById('btnEdit').style.display = isAdmin ? 'inline-flex' : 'none';
+    const btnDone = document.getElementById('btnMarkDone');
+    const btnDel  = document.getElementById('btnDelete');
+    if (isAdmin && curEvent && curEvent.status === 'Upcoming') btnDone.style.display = 'inline-flex';
+    else btnDone.style.display = 'none';
+    if (isAdmin) btnDel.style.display = 'inline-flex';
+    else btnDel.style.display = 'none';
+  }
+}
+
 </script>
 </body>
 </html>
