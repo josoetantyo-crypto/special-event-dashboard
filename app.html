@@ -1066,8 +1066,19 @@ async function loadEvents() {
     events.forEach(e => { e.group='—'; e.momentum=''; });
     showToast('Mode offline — menampilkan data default');
   }
-  render();
+  try {
+    render();
+  } catch(e) {
+    console.error('render error:', e);
+    const c = document.getElementById('eventsContainer');
+    if (c) c.innerHTML = `<div style="padding:40px;color:red;font-family:monospace;font-size:12px">
+      <b>Render Error:</b><br>${e.message}<br><br>
+      Events loaded: ${events.length}<br>
+      <pre>${e.stack ? e.stack.slice(0,400) : ''}</pre>
+    </div>`;
+  }
   document.getElementById('loadingWrap').classList.remove('show');
+  document.getElementById('loadingWrap').style.display = 'none';
   setSyncDot('saved');
 }
 
