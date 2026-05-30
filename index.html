@@ -260,6 +260,30 @@ main { max-width:1440px; margin:0 auto; padding:32px 32px 64px; }
 .tl-lg-item{display:flex;align-items:center;gap:6px;font-size:9px;font-weight:700;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px;}
 .tl-lg-dot{width:12px;height:12px;border-radius:3px;border:1.5px solid;}
 
+
+/* ═══ ADMIN + LOGIN ═══ */
+.admin-only{display:none!important;}
+body.is-admin .admin-only{display:inline-flex!important;}
+.admin-badge{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;background:rgba(22,163,74,.15);color:#16a34a;border:1px solid rgba(22,163,74,.3);padding:4px 12px;border-radius:100px;}
+.login-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:300;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(3px);}
+.login-overlay.open{opacity:1;pointer-events:all;}
+.login-box{background:var(--white);border-radius:12px;width:100%;max-width:360px;padding:32px;box-shadow:0 24px 60px rgba(0,0,0,.2);position:relative;}
+.login-logo{display:flex;justify-content:center;margin-bottom:20px;}
+.login-logo img{height:28px;}
+.login-title{font-size:18px;font-weight:800;color:var(--black);text-align:center;margin-bottom:4px;}
+.login-sub{font-size:12px;color:var(--gray-400);text-align:center;margin-bottom:24px;}
+.login-label{font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--gray-600);margin-bottom:5px;display:block;}
+.login-input{width:100%;border:1.5px solid var(--gray-200);border-radius:7px;padding:10px 13px;font-size:13px;font-family:inherit;color:var(--black);outline:none;transition:border-color .2s;margin-bottom:14px;}
+.login-input:focus{border-color:var(--black);}
+.login-btn{width:100%;background:var(--black);border:none;color:var(--white);font-size:13px;font-weight:700;font-family:inherit;padding:11px;border-radius:7px;cursor:pointer;transition:background .2s;letter-spacing:.5px;}
+.login-btn:hover{background:#333;}
+.login-btn:disabled{background:var(--gray-300);cursor:not-allowed;}
+.login-err{font-size:12px;color:var(--red);margin-top:10px;text-align:center;min-height:18px;}
+.login-close{position:absolute;top:14px;right:14px;background:var(--gray-100);border:none;border-radius:6px;color:var(--gray-600);cursor:pointer;font-size:14px;padding:5px 9px;line-height:1;}
+.login-close:hover{background:var(--gray-200);}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--gray-300);display:inline-block;transition:background .3s;flex-shrink:0;}
+.sync-dot.saving{background:#eab308;}.sync-dot.saved{background:#16a34a;}.sync-dot.error{background:var(--red);}
+
 @media(max-width:768px){
   .header-inner{padding:0 16px}
   .header-stats{display:none}
@@ -287,9 +311,13 @@ main { max-width:1440px; margin:0 auto; padding:32px 32px 64px; }
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         <input class="search" id="searchInput" placeholder="Cari event...">
       </div>
-      <button class="hbtn" onclick="exportCSV()">Export CSV</button>
-      <button class="hbtn hbtn-red" onclick="openCreateModal()">+ Tambah Event</button>
-      <button class="hbtn" onclick="confirmReset()">Reset</button>
+      <button class="hbtn admin-only" onclick="exportCSV()">Export CSV</button>
+      <button class="hbtn hbtn-red admin-only" onclick="openCreateModal()">+ Tambah Event</button>
+      <button class="hbtn admin-only" onclick="confirmReset()">Reset</button>
+      <span class="sync-dot" id="syncDot"></span>
+      <span class="admin-badge" id="adminBadge" style="display:none">● Admin</span>
+      <button class="hbtn hbtn-red" id="btnLogin" onclick="openLoginModal()">🔒 Admin</button>
+      <button class="hbtn" id="btnLogout" onclick="doLogout()" style="display:none">Logout</button>
     </div>
   </div>
   <div class="progress-strip"><div class="progress-fill" id="progressFill"></div></div>
@@ -364,6 +392,23 @@ main { max-width:1440px; margin:0 auto; padding:32px 32px 64px; }
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- LOGIN MODAL -->
+<div class="login-overlay" id="loginOverlay" onclick="handleLoginOverlayClick(event)">
+  <div class="login-box">
+    <button class="login-close" onclick="closeLoginModal()">✕</button>
+    <div class="login-logo"><img src="ignitex-logo.png" alt="IgniteX"></div>
+    <div class="login-title">Admin Login</div>
+    <div class="login-sub">Masuk untuk mengelola event</div>
+    <label class="login-label">Password Admin</label>
+    <input class="login-input" id="loginPassword" type="password" placeholder="••••••••"
+      onkeydown="if(event.key==='Enter') doLogin()">
+    <button class="login-btn" id="btnLoginSubmit" onclick="doLogin()">Login</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+
 
 <script>
 // ═══════════════════════════ DATA ═══════════════════════════
@@ -574,6 +619,7 @@ const DEFAULT = [
 // ═══════════════════════════ STATE ═══════════════════════════
 const STORAGE_KEY = 'ignitex_special_2026_v7';
 let events = [], filterQ = 'ALL', filterS = 'all', filterG = 'ALL', searchQ = '', curEvent = null, isEditing = false, isCreating = false, currentView = 'card';
+let isAdmin = false, adminPass = sessionStorage.getItem('igx_pass') || '', lastHash = '';
 
 const QUARTER_LABELS = {Q1:'Januari — Maret',Q2:'April — Juni',Q3:'Juli — September',Q4:'Oktober — Desember'};
 const MONTHS_ORDER = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'];
@@ -891,11 +937,11 @@ function buildModal() {
     ${e.pic!=='—'?`<span class="mtag">PIC: ${e.pic}</span>`:''}
     <span class="mtag">${e.q}</span>
     <span class="gbadge ${groupBadgeClass(grp)}" style="font-size:10px;padding:4px 12px">${grp==='—'?'Belum Ditandai':grp}</span>`;
-  document.getElementById('btnMarkDone').style.display = e.status==='Upcoming' ? 'block' : 'none';
-  document.getElementById('btnDelete').style.display = 'block';
-  document.getElementById('btnEdit').style.display = 'block';
+  document.getElementById('btnMarkDone').style.display = (isAdmin && e.status==='Upcoming') ? 'inline-flex' : 'none';
+  document.getElementById('btnDelete').style.display = isAdmin ? 'inline-flex' : 'none';
+  document.getElementById('btnEdit').style.display = isAdmin ? 'inline-flex' : 'none';
   document.getElementById('btnEdit').textContent = isEditing ? 'Batal' : 'Edit';
-  document.getElementById('btnSave').style.display = isEditing ? 'block' : 'none';
+  document.getElementById('btnSave').style.display = (isAdmin && isEditing) ? 'inline-flex' : 'none';
   document.getElementById('btnSave').textContent = 'Simpan';
   isEditing ? buildEditForm() : buildViewBody();
 }
@@ -903,25 +949,34 @@ function buildModal() {
 function buildViewBody() {
   const e = curEvent;
   const grp = e.group || '—';
-  document.getElementById('mBody').innerHTML = `
-    <div class="group-assign">
-      <span class="group-assign-label">Kelompok Acara</span>
-      <select class="group-sel" onchange="setGroup(this.value)">
-        <option value="—"${grp==='—'?' selected':''}>— Belum Ditandai</option>
-        <option value="Ignite"${grp==='Ignite'?' selected':''}>🔴 Ignite</option>
-        <option value="Connect"${grp==='Connect'?' selected':''}>⚫ Connect</option>
-      </select>
-    </div>
-    <div class="m-sec">Momentum Pengumuman</div>
-    <textarea class="momentum-ta" id="momentumInput" placeholder="Tulis momentum / pengumuman penting untuk event ini..." onblur="saveMomentum(this.value)">${e.momentum||''}</textarea>
-    <div class="momentum-hint">Teks ini langsung tampil di card depan saat diisi. Klik di luar kotak untuk menyimpan.</div>
+  const gbc = groupBadgeClass(grp);
+  const gLabel = grp === '—' ? 'Belum Ditandai' : grp;
+  const groupRow = isAdmin
+    ? `<div class="group-assign">
+        <span class="group-assign-label">Kelompok Acara</span>
+        <select class="group-sel" onchange="setGroup(this.value)">
+          <option value="—"${grp==='—'?' selected':''}>— Belum Ditandai</option>
+          <option value="Ignite"${grp==='Ignite'?' selected':''}>🔴 Ignite</option>
+          <option value="Connect"${grp==='Connect'?' selected':''}>⚫ Connect</option>
+        </select>
+      </div>`
+    : `<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+        <span style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-400)">Kelompok:</span>
+        <span class="gbadge ${gbc}">${gLabel}</span>
+      </div>`;
+  const momentumRow = isAdmin
+    ? `<div class="m-sec">Momentum Pengumuman</div>
+       <textarea class="momentum-ta" id="momentumInput" placeholder="Tulis momentum / pengumuman penting untuk event ini..." onblur="saveMomentum(this.value)">${e.momentum||''}</textarea>
+       <div class="momentum-hint">Teks ini langsung tampil di card depan saat diisi. Klik di luar kotak untuk menyimpan.</div>`
+    : (e.momentum ? `<div class="ecard-momentum">📢 ${e.momentum}</div>` : '');
+  document.getElementById('mBody').innerHTML = groupRow + momentumRow + `
     <div class="m-sec">Deskripsi</div>
     <div class="m-desc">${e.desc}</div>
     <div class="m-sec">Agenda</div>
     <ul class="m-list">${e.agenda.map((a,i)=>`<li><span class="m-num">${i+1}</span><span>${a}</span></li>`).join('')}</ul>
     <div class="m-sec">Tujuan</div>
     <ul class="m-list" style="margin-bottom:16px">${e.tujuan.map((t,i)=>`<li><span class="m-num">${i+1}</span><span>${t}</span></li>`).join('')}</ul>
-    ${e.notes?`<div class="m-sec">Catatan</div><div class="m-note">${e.notes}</div>`:''}`;
+    ${e.notes?\`<div class="m-sec">Catatan</div><div class="m-note">${e.notes}</div>\`:''}`;
 }
 
 function buildEditForm() {
@@ -1119,12 +1174,79 @@ function showToast(msg) {
   clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove('show'),2000);
 }
 
+
+// ═══════════════════════════ ADMIN AUTH ═══════════════════════════
+function activateAdmin(notify = true) {
+  isAdmin = true;
+  document.body.classList.add('is-admin');
+  document.getElementById('btnLogin').style.display   = 'none';
+  document.getElementById('btnLogout').style.display  = 'inline-flex';
+  document.getElementById('adminBadge').style.display = 'inline-flex';
+  if (notify) showToast('✔ Login berhasil — mode Admin aktif');
+  render();
+}
+function doLogout() {
+  isAdmin = false; adminPass = '';
+  sessionStorage.removeItem('igx_pass');
+  document.body.classList.remove('is-admin');
+  document.getElementById('btnLogin').style.display   = 'inline-flex';
+  document.getElementById('btnLogout').style.display  = 'none';
+  document.getElementById('adminBadge').style.display = 'none';
+  if (isEditing || isCreating) closeModal();
+  showToast('✔ Logged out');
+  render();
+}
+async function doLogin() {
+  const pass = document.getElementById('loginPassword').value.trim();
+  const btn  = document.getElementById('btnLoginSubmit');
+  const err  = document.getElementById('loginErr');
+  err.textContent = '';
+  if (!pass) { err.textContent = 'Masukkan password'; return; }
+  btn.disabled = true; btn.textContent = 'Memverifikasi...';
+  try {
+    const res = await fetch('/api/events', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Password': pass },
+      body: JSON.stringify(events)
+    });
+    btn.disabled = false; btn.textContent = 'Login';
+    if (res.status === 401) { err.textContent = 'Password salah'; return; }
+    if (!res.ok) { err.textContent = 'Error server, coba lagi'; return; }
+    adminPass = pass;
+    sessionStorage.setItem('igx_pass', pass);
+    closeLoginModal();
+    activateAdmin(true);
+  } catch(_) { btn.disabled = false; btn.textContent = 'Login'; err.textContent = 'Koneksi error'; }
+}
+function openLoginModal() {
+  document.getElementById('loginOverlay').classList.add('open');
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginErr').textContent = '';
+  setTimeout(() => document.getElementById('loginPassword').focus(), 100);
+}
+function closeLoginModal() { document.getElementById('loginOverlay').classList.remove('open'); }
+function handleLoginOverlayClick(e) { if (e.target === document.getElementById('loginOverlay')) closeLoginModal(); }
+
 // ═══════════════════════════ KEYS & EVENTS ═══════════════════════════
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 document.getElementById('searchInput').addEventListener('input', e => { searchQ = e.target.value; render(); });
 
 // ═══════════════════════════ INIT ═══════════════════════════
 load(); render();
+// Restore admin session if password saved
+(async () => {
+  const saved = sessionStorage.getItem('igx_pass');
+  if (!saved) return;
+  try {
+    const res = await fetch('/api/events', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Password': saved },
+      body: JSON.stringify(events)
+    });
+    if (res.ok) { adminPass = saved; activateAdmin(false); }
+    else sessionStorage.removeItem('igx_pass');
+  } catch(_) {}
+})();
 </script>
 </body>
 </html>
