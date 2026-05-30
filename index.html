@@ -976,7 +976,7 @@ function buildViewBody() {
     <ul class="m-list">${e.agenda.map((a,i)=>`<li><span class="m-num">${i+1}</span><span>${a}</span></li>`).join('')}</ul>
     <div class="m-sec">Tujuan</div>
     <ul class="m-list" style="margin-bottom:16px">${e.tujuan.map((t,i)=>`<li><span class="m-num">${i+1}</span><span>${t}</span></li>`).join('')}</ul>
-    ${e.notes?\`<div class="m-sec">Catatan</div><div class="m-note">${e.notes}</div>\`:''}`;
+    ${e.notes?`<div class="m-sec">Catatan</div><div class="m-note">${e.notes}</div>`:''}`;
 }
 
 function buildEditForm() {
