@@ -54,7 +54,7 @@ header { background:var(--black); position:sticky; top:0; z-index:100; }
 .progress-fill { height:100%; background:var(--red); transition:width .8s ease; }
 
 /* ═══ TIMELINE STRIP ═══ */
-.timeline-strip { background:var(--black); border-bottom:2px solid var(--red); padding:0 32px; overflow-x:auto; scrollbar-width:none; }
+.timeline-strip { background:var(--black); border-bottom:2px solid var(--red); padding:0 32px; overflow-x:auto; scrollbar-width:none; position:sticky; top:75px; z-index:95; }
 .timeline-strip::-webkit-scrollbar { display:none; }
 .timeline-inner { max-width:1440px; margin:0 auto; display:flex; align-items:stretch; gap:0; min-width:700px; }
 .tq-group { display:flex; align-items:stretch; border-right:1px solid rgba(255,255,255,.1); }
@@ -71,7 +71,7 @@ header { background:var(--black); position:sticky; top:0; z-index:100; }
 .tmonth.has-events .dot-count { background:rgba(255,100,100,.5); }
 
 /* ═══ FILTER BAR ═══ */
-.filter-bar { background:var(--white); border-bottom:1px solid var(--gray-200); padding:0 32px; position:sticky; top:64px; z-index:90; }
+.filter-bar { background:var(--white); border-bottom:1px solid var(--gray-200); padding:0 32px; position:sticky; top:117px; z-index:90; }
 .filter-inner { max-width:1440px; margin:0 auto; display:flex; align-items:center; gap:8px; height:48px; flex-wrap:wrap; overflow:hidden; }
 .filter-divider { width:1px; height:20px; background:var(--gray-200); margin:0 4px; flex-shrink:0; }
 .fc { padding:5px 14px; border-radius:100px; border:1px solid var(--gray-200); background:var(--white); color:var(--gray-600); font-size:11px; font-weight:600; font-family:inherit; letter-spacing:.5px; text-transform:uppercase; cursor:pointer; transition:all .18s; white-space:nowrap; }
