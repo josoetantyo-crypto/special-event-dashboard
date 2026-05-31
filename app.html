@@ -225,6 +225,42 @@ main { max-width:1440px; margin:0 auto; padding:32px 32px 64px; }
 ::-webkit-scrollbar-track { background:var(--gray-100); }
 ::-webkit-scrollbar-thumb { background:var(--gray-300); border-radius:3px; }
 
+
+/* ═══ VIEW TOGGLE ═══ */
+.view-toggle{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.vbtn{padding:5px 12px;border-radius:6px;border:1px solid var(--gray-200);background:var(--white);color:var(--gray-600);font-size:11px;font-weight:700;font-family:inherit;letter-spacing:.5px;cursor:pointer;transition:all .18s;white-space:nowrap;}
+.vbtn:hover{border-color:var(--black);color:var(--black);}
+.vbtn.active{background:var(--black);border-color:var(--black);color:var(--white);}
+
+/* ═══ TIMELINE VIEW ═══ */
+#timelineContainer{display:none;}
+.tl-outer{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--gray-200);border-radius:8px;}
+.tl-track{width:1440px;position:relative;}
+.tl-head{display:flex;border-bottom:2px solid var(--black);}
+.tl-q-seg{width:360px;flex-shrink:0;border-right:2px solid var(--black);}
+.tl-q-seg:last-child{border-right:none;}
+.tl-q-top{background:var(--black);padding:8px 0;text-align:center;font-size:11px;font-weight:900;color:var(--red);letter-spacing:3px;text-transform:uppercase;}
+.tl-q-months{display:flex;}
+.tl-month-lbl{flex:1;padding:6px 0;text-align:center;font-size:9px;font-weight:700;color:var(--gray-400);letter-spacing:1.5px;text-transform:uppercase;border-right:1px solid var(--gray-200);}
+.tl-month-lbl:last-child{border-right:none;}
+.tl-month-lbl.tl-cur{color:var(--red);background:rgba(212,0,0,.05);}
+.tl-body{position:relative;min-height:80px;padding:8px 0 16px;}
+.tl-msep{position:absolute;top:0;bottom:0;width:1px;background:var(--gray-100);pointer-events:none;z-index:1;}
+.tl-qsep{position:absolute;top:0;bottom:0;width:2px;background:rgba(0,0,0,.1);pointer-events:none;z-index:1;}
+.tl-today{position:absolute;top:0;bottom:0;width:2px;background:var(--red);opacity:.85;z-index:3;pointer-events:none;}
+.tl-today::before{content:'TODAY';position:absolute;top:3px;left:4px;font-size:7px;font-weight:900;color:var(--red);letter-spacing:1px;white-space:nowrap;}
+.tl-row{position:relative;height:42px;}
+.tl-ev{position:absolute;height:30px;border-radius:5px;padding:0 9px;display:flex;align-items:center;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:1.5px solid;transition:all .15s;z-index:2;top:6px;}
+.tl-ev:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.15);z-index:5;}
+.tl-ev.s-done{background:var(--gray-100);color:var(--gray-600);border-color:var(--gray-200);}
+.tl-ev.s-upcoming{background:rgba(212,0,0,.08);color:var(--red);border-color:rgba(212,0,0,.2);}
+.tl-ev.g-connect.s-upcoming{background:rgba(10,10,10,.06);color:var(--black);border-color:rgba(10,10,10,.15);}
+.tl-ev.c-summit,.tl-ev.c-major{background:var(--black);color:var(--white);border-color:var(--black);}
+.tl-ev.c-trip{background:rgba(212,0,0,.12);color:var(--red);border-color:rgba(212,0,0,.3);}
+.tl-legend{display:flex;align-items:center;gap:16px;padding:10px 14px;background:var(--gray-50);border-top:1px solid var(--gray-200);border-radius:0 0 7px 7px;flex-wrap:wrap;}
+.tl-lg-item{display:flex;align-items:center;gap:6px;font-size:9px;font-weight:700;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px;}
+.tl-lg-dot{width:12px;height:12px;border-radius:3px;border:1.5px solid;}
+
 @media(max-width:768px){
   .header-inner{padding:0 16px}
   .header-stats{display:none}
@@ -312,7 +348,12 @@ body.is-admin .admin-only { display:inline-flex !important; }
     <button class="fc" id="fg-Ignite" onclick="setFilter('g','Ignite',this)" style="color:var(--red);border-color:rgba(212,0,0,.3)">● Ignite</button>
     <button class="fc" id="fg-Connect" onclick="setFilter('g','Connect',this)">● Connect</button>
     <button class="fc" id="fg-none" onclick="setFilter('g','—',this)">Belum Ditandai</button>
-    <div class="filter-right">
+    <div class="filter-right" style="display:flex;align-items:center;gap:10px">
+      <div style="width:1px;height:20px;background:var(--gray-200);flex-shrink:0"></div>
+      <div class="view-toggle">
+        <button class="vbtn active" id="vCard" onclick="setView('card',this)">☰ Cards</button>
+        <button class="vbtn" id="vTimeline" onclick="setView('timeline',this)">━ Timeline</button>
+      </div>
       <span class="count-text" id="countLabel"></span>
     </div>
   </div>
@@ -320,6 +361,7 @@ body.is-admin .admin-only { display:inline-flex !important; }
 
 <main id="mainContent">
   <div id="eventsContainer"></div>
+  <div id="timelineContainer"></div>
   <div class="empty" id="emptyState" style="display:none">
     <div class="empty-title">Tidak ada event ditemukan</div>
     <div class="empty-sub">Coba ubah filter atau kata kunci pencarian</div>
@@ -586,6 +628,7 @@ const DEFAULT = [
 let events = [], filterQ = 'ALL', filterS = 'all', filterG = 'ALL', searchQ = '';
 let curEvent = null, isEditing = false, isCreating = false;
 let isAdmin = false, adminPass = sessionStorage.getItem('igx_pass') || '';
+let currentView = 'card';
 let lastHash = '';
 
 // ════════════════════════════════════════════════
@@ -598,6 +641,89 @@ const CAT_CLASS      = {BOP:'bop','SPECIAL MONDAY':'','ROAD TO IDEASCAPE':'trip'
 const MONTH_OPTS     = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'];
 const MONTH_FULL_MAP = {JAN:'Januari',FEB:'Februari',MAR:'Maret',APR:'April',MEI:'Mei',JUN:'Juni',JUL:'Juli',AGS:'Agustus',SEPT:'September',OKT:'Oktober',NOV:'November',DES:'Desember'};
 const CAT_OPTS       = ['BOP','SPECIAL MONDAY','ROAD TO IDEASCAPE','LEADERS MEETING','TRIP','OUTING','CORE','ROAD TO AAB','MAJOR EVENT','SUMMIT','SPORT'];
+
+
+// ═══════════════════════════ VIEW TOGGLE ═══════════════════════════
+function setView(v, el) {
+  currentView = v;
+  document.querySelectorAll('.vbtn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+// ═══════════════════════════ TIMELINE ═══════════════════════════
+const TL_MW = 120;
+const TL_MO = {JAN:0,FEB:120,MAR:240,APR:360,MEI:480,JUN:600,JUL:720,AGS:840,SEPT:960,OKT:1080,NOV:1200,DES:1320};
+const TL_MD = {JAN:31,FEB:28,MAR:31,APR:30,MEI:31,JUN:30,JUL:31,AGS:31,SEPT:30,OKT:31,NOV:30,DES:31};
+
+function tlPx(e) {
+  const off = TL_MO[e.month] ?? 0;
+  const day = e.date ? new Date(e.date + 'T00:00:00').getDate() : 1;
+  return off + (day - 1) / (TL_MD[e.month] || 30) * TL_MW;
+}
+function tlWpx(e) {
+  const m = (e.dateDisplay || '').match(/(\d+)[–\-](\d+)/);
+  const dur = m ? Math.max(1, parseInt(m[2]) - parseInt(m[1]) + 1) : 1;
+  return Math.max(106, dur / (TL_MD[e.month] || 30) * TL_MW);
+}
+function tlTodayPx() {
+  const t = new Date();
+  const ms = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'][t.getMonth()];
+  return (TL_MO[ms] || 0) + (t.getDate() - 1) / (TL_MD[ms] || 30) * TL_MW;
+}
+function tlPackRows(evts) {
+  const GAP = 8, rows = [], ends = [];
+  evts.forEach(e => {
+    const sx = tlPx(e), wx = tlWpx(e), ex = sx + wx + GAP;
+    let r = ends.findIndex(end => sx >= end);
+    if (r === -1) { r = rows.length; rows.push([]); ends.push(0); }
+    rows[r].push({...e, sx, wx});
+    ends[r] = ex;
+  });
+  return rows;
+}
+function getActiveMonth() {
+  return ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'][new Date().getMonth()];
+}
+function renderTimeline(f) {
+  const el = document.getElementById('timelineContainer');
+  const curM = getActiveMonth();
+  const qcfg = [
+    {q:'Q1',months:['JAN','FEB','MAR']},
+    {q:'Q2',months:['APR','MEI','JUN']},
+    {q:'Q3',months:['JUL','AGS','SEPT']},
+    {q:'Q4',months:['OKT','NOV','DES']}
+  ];
+  const head = `<div class="tl-head">${qcfg.map(({q,months}) =>
+    `<div class="tl-q-seg"><div class="tl-q-top">${q}</div><div class="tl-q-months">${
+      months.map(m => `<div class="tl-month-lbl${m===curM?' tl-cur':''}">${m}</div>`).join('')
+    }</div></div>`).join('')}</div>`;
+  const seps =
+    [120,240,480,600,840,960,1200,1320].map(x=>`<div class="tl-msep" style="left:${x}px"></div>`).join('') +
+    [360,720,1080].map(x=>`<div class="tl-qsep" style="left:${x}px"></div>`).join('');
+  const todayEl = `<div class="tl-today" style="left:${tlTodayPx().toFixed(1)}px"></div>`;
+  const sorted = [...f].sort((a,b) => a.date.localeCompare(b.date));
+  const rows = tlPackRows(sorted);
+  const pills = rows.map(row =>
+    `<div class="tl-row">${row.map(e => {
+      let cls = `s-${e.status.toLowerCase()}`;
+      if (e.group === 'Connect') cls += ' g-connect';
+      if (e.category === 'SUMMIT') cls += ' c-summit';
+      else if (e.category === 'MAJOR EVENT') cls += ' c-major';
+      else if (e.category === 'TRIP') cls += ' c-trip';
+      const tip = `${e.name} — ${e.dateDisplay} ${e.monthFull} 2026 · ${e.category}`.replace(/"/g,'&quot;');
+      return `<div class="tl-ev ${cls}" style="left:${e.sx.toFixed(1)}px;width:${e.wx.toFixed(1)}px" onclick="openModal(${e.id})" title="${tip}">${e.dateDisplay} ${e.name}</div>`;
+    }).join('')}</div>`
+  ).join('');
+  const legend = `<div class="tl-legend">
+    <div class="tl-lg-item"><div class="tl-lg-dot" style="background:rgba(212,0,0,.08);border-color:rgba(212,0,0,.2)"></div>Upcoming</div>
+    <div class="tl-lg-item"><div class="tl-lg-dot" style="background:var(--gray-100);border-color:var(--gray-200)"></div>Done</div>
+    <div class="tl-lg-item"><div class="tl-lg-dot" style="background:rgba(212,0,0,.12);border-color:rgba(212,0,0,.3)"></div>Trip</div>
+    <div class="tl-lg-item"><div class="tl-lg-dot" style="background:var(--black);border-color:var(--black)"></div>Summit / Major</div>
+    <div class="tl-lg-item" style="margin-left:auto;color:var(--red);font-size:9px">▎ Garis merah = hari ini &nbsp;·&nbsp; Klik event untuk edit</div>
+  </div>`;
+  el.innerHTML = `<div class="tl-outer"><div class="tl-track">${head}<div class="tl-body">${seps}${todayEl}${pills}</div></div>${legend}</div>`;
+}
 
 // ═══════════════════════════ FILTER ═══════════════════════════
 function setFilter(type, val, el) {
@@ -649,7 +775,19 @@ function render() {
 
   // Content
   const container = document.getElementById('eventsContainer');
+  const tlContainer = document.getElementById('timelineContainer');
   const empty = document.getElementById('emptyState');
+
+  if (currentView === 'timeline') {
+    container.style.display = 'none';
+    tlContainer.style.display = 'block';
+    if (!f.length) { tlContainer.innerHTML = ''; empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    renderTimeline(f);
+    return;
+  }
+  container.style.display = '';
+  tlContainer.style.display = 'none';
   if(!f.length) { container.innerHTML=''; empty.style.display='block'; return; }
   empty.style.display='none';
 
