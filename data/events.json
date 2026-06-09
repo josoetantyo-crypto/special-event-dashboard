@@ -892,5 +892,23 @@
     "notes": "PIC: Jeshua. Undang keluarga. Dress code: formal.",
     "group": "Ignite",
     "momentum": ""
+  },
+  {
+    "id": 36,
+    "q": "Q2",
+    "month": "JUN",
+    "monthFull": "Juni",
+    "date": "2026-06-11",
+    "dateDisplay": "11",
+    "name": "HIGHWAY TO MILLIONARE",
+    "category": "BOP",
+    "pic": "IRENE",
+    "group": "Ignite",
+    "status": "Upcoming",
+    "momentum": "",
+    "desc": "",
+    "agenda": [],
+    "tujuan": [],
+    "notes": ""
   }
 ]
