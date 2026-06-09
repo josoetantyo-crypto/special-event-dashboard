@@ -598,33 +598,6 @@
     "momentum": ""
   },
   {
-    "id": 21,
-    "q": "Q3",
-    "month": "AGS",
-    "date": "2026-08-22",
-    "dateDisplay": "22",
-    "monthFull": "Agustus",
-    "name": "Road to AAB — Biweekly",
-    "category": "ROAD TO AAB",
-    "pic": "Jeremy",
-    "status": "Upcoming",
-    "desc": "Sesi biweekly Road to AAB — program persiapan intensif menuju target Agent of the Board.",
-    "agenda": [
-      "Progress check AAB candidates",
-      "Skill gap filling",
-      "Strategy refinement",
-      "Accountability & next steps"
-    ],
-    "tujuan": [
-      "Track progress AAB candidates",
-      "Identifikasi gap dan solusi",
-      "Pastikan eksekusi on-track"
-    ],
-    "notes": "PIC: Jeremy. Khusus kandidat AAB.",
-    "group": "Ignite",
-    "momentum": ""
-  },
-  {
     "id": 22,
     "q": "Q3",
     "month": "AGS",
