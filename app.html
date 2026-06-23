@@ -1195,7 +1195,6 @@ async function loadEvents() {
     if (Array.isArray(data) && data.length > 0) {
       events = data;
       events.forEach(e => { if(!e.group) e.group='—'; if(e.momentum===undefined) e.momentum=''; });
-      lastHash = quickHash();
     } else {
       // API returned empty — fallback to DEFAULT
       events = JSON.parse(JSON.stringify(DEFAULT));
@@ -1208,6 +1207,8 @@ async function loadEvents() {
     events.forEach(e => { e.group='—'; e.momentum=''; });
     showToast('Mode offline — menampilkan data default');
   }
+  applyAutoDone(events);
+  lastHash = quickHash();
   render();
   document.getElementById('loadingWrap').classList.remove('show');
   document.getElementById('loadingWrap').style.display = 'none';
@@ -1231,6 +1232,31 @@ async function saveEvents() {
   } catch(_) { showToast('Gagal menyimpan'); setSyncDot(''); return false; }
 }
 
+// Tanggal terakhir event — untuk event multi-hari (mis. dateDisplay '17–18')
+// pakai hari terakhir agar tidak dianggap selesai saat acara masih berlangsung.
+function eventEndDate(e) {
+  if (!e.date) return null;
+  const base = new Date(e.date + 'T00:00:00');
+  if (e.dateDisplay && /[–-]/.test(e.dateDisplay)) {
+    const parts = e.dateDisplay.split(/[–-]/).map(s => parseInt(s.trim(), 10));
+    const endDay = parts[parts.length - 1];
+    if (!isNaN(endDay)) base.setDate(endDay);
+  }
+  return base;
+}
+
+// Auto-done: event yang tanggalnya sudah lewat dan masih 'Upcoming'
+// otomatis ditandai 'Done'. Status 'Cancelled' tidak diubah.
+function applyAutoDone(list) {
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  list.forEach(e => {
+    if (e.status === 'Upcoming') {
+      const end = eventEndDate(e);
+      if (end && end < today) e.status = 'Done';
+    }
+  });
+}
+
 function quickHash() {
   return events.map(e => e.id+e.status+(e.momentum||'')+(e.group||'')+(e.name||'')).join('|');
 }
@@ -1246,10 +1272,11 @@ function startPolling() {
       if (!res.ok) return;
       const data = await res.json();
       if (!Array.isArray(data)) return;
+      data.forEach(e => { if(!e.group) e.group='—'; if(e.momentum===undefined) e.momentum=''; });
+      applyAutoDone(data);
       const newHash = data.map(e => e.id+e.status+(e.momentum||'')+(e.group||'')+(e.name||'')).join('|');
       if (newHash === lastHash) return;
       events = data;
-      events.forEach(e => { if(!e.group) e.group='—'; if(e.momentum===undefined) e.momentum=''; });
       lastHash = newHash;
       render();
       if (curEvent && !isEditing) {
