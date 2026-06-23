@@ -54,7 +54,7 @@ header { background:var(--black); position:sticky; top:0; z-index:100; }
 .progress-fill { height:100%; background:var(--red); transition:width .8s ease; }
 
 /* ═══ TIMELINE STRIP ═══ */
-.timeline-strip { background:var(--black); border-bottom:2px solid var(--red); padding:0 32px; overflow-x:auto; scrollbar-width:none; position:sticky; top:75px; z-index:95; }
+.timeline-strip { background:var(--black); border-bottom:2px solid var(--red); padding:0 32px; overflow-x:auto; scrollbar-width:none; }
 .timeline-strip::-webkit-scrollbar { display:none; }
 .timeline-inner { max-width:1440px; margin:0 auto; display:flex; align-items:stretch; gap:0; min-width:700px; }
 .tq-group { display:flex; align-items:stretch; border-right:1px solid rgba(255,255,255,.1); }
@@ -71,7 +71,7 @@ header { background:var(--black); position:sticky; top:0; z-index:100; }
 .tmonth.has-events .dot-count { background:rgba(255,100,100,.5); }
 
 /* ═══ FILTER BAR ═══ */
-.filter-bar { background:var(--white); border-bottom:1px solid var(--gray-200); padding:0 32px; position:sticky; top:117px; z-index:90; }
+.filter-bar { background:var(--white); border-bottom:1px solid var(--gray-200); padding:0 32px; position:sticky; top:64px; z-index:90; }
 .filter-inner { max-width:1440px; margin:0 auto; display:flex; align-items:center; gap:8px; height:48px; flex-wrap:wrap; overflow:hidden; }
 .filter-divider { width:1px; height:20px; background:var(--gray-200); margin:0 4px; flex-shrink:0; }
 .fc { padding:5px 14px; border-radius:100px; border:1px solid var(--gray-200); background:var(--white); color:var(--gray-600); font-size:11px; font-weight:600; font-family:inherit; letter-spacing:.5px; text-transform:uppercase; cursor:pointer; transition:all .18s; white-space:nowrap; }
@@ -225,9 +225,8 @@ main { max-width:1440px; margin:0 auto; padding:32px 32px 64px; }
 ::-webkit-scrollbar-track { background:var(--gray-100); }
 ::-webkit-scrollbar-thumb { background:var(--gray-300); border-radius:3px; }
 
-
 /* ═══ VIEW TOGGLE ═══ */
-.view-toggle{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.view-toggle{display:flex;align-items:center;gap:4px;}
 .vbtn{padding:5px 12px;border-radius:6px;border:1px solid var(--gray-200);background:var(--white);color:var(--gray-600);font-size:11px;font-weight:700;font-family:inherit;letter-spacing:.5px;cursor:pointer;transition:all .18s;white-space:nowrap;}
 .vbtn:hover{border-color:var(--black);color:var(--black);}
 .vbtn.active{background:var(--black);border-color:var(--black);color:var(--white);}
@@ -261,6 +260,30 @@ main { max-width:1440px; margin:0 auto; padding:32px 32px 64px; }
 .tl-lg-item{display:flex;align-items:center;gap:6px;font-size:9px;font-weight:700;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px;}
 .tl-lg-dot{width:12px;height:12px;border-radius:3px;border:1.5px solid;}
 
+
+/* ═══ ADMIN + LOGIN ═══ */
+.admin-only{display:none!important;}
+body.is-admin .admin-only{display:inline-flex!important;}
+.admin-badge{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;background:rgba(22,163,74,.15);color:#16a34a;border:1px solid rgba(22,163,74,.3);padding:4px 12px;border-radius:100px;}
+.login-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:300;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(3px);}
+.login-overlay.open{opacity:1;pointer-events:all;}
+.login-box{background:var(--white);border-radius:12px;width:100%;max-width:360px;padding:32px;box-shadow:0 24px 60px rgba(0,0,0,.2);position:relative;}
+.login-logo{display:flex;justify-content:center;margin-bottom:20px;}
+.login-logo img{height:28px;}
+.login-title{font-size:18px;font-weight:800;color:var(--black);text-align:center;margin-bottom:4px;}
+.login-sub{font-size:12px;color:var(--gray-400);text-align:center;margin-bottom:24px;}
+.login-label{font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--gray-600);margin-bottom:5px;display:block;}
+.login-input{width:100%;border:1.5px solid var(--gray-200);border-radius:7px;padding:10px 13px;font-size:13px;font-family:inherit;color:var(--black);outline:none;transition:border-color .2s;margin-bottom:14px;}
+.login-input:focus{border-color:var(--black);}
+.login-btn{width:100%;background:var(--black);border:none;color:var(--white);font-size:13px;font-weight:700;font-family:inherit;padding:11px;border-radius:7px;cursor:pointer;transition:background .2s;letter-spacing:.5px;}
+.login-btn:hover{background:#333;}
+.login-btn:disabled{background:var(--gray-300);cursor:not-allowed;}
+.login-err{font-size:12px;color:var(--red);margin-top:10px;text-align:center;min-height:18px;}
+.login-close{position:absolute;top:14px;right:14px;background:var(--gray-100);border:none;border-radius:6px;color:var(--gray-600);cursor:pointer;font-size:14px;padding:5px 9px;line-height:1;}
+.login-close:hover{background:var(--gray-200);}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--gray-300);display:inline-block;transition:background .3s;flex-shrink:0;}
+.sync-dot.saving{background:#eab308;}.sync-dot.saved{background:#16a34a;}.sync-dot.error{background:var(--red);}
+
 @media(max-width:768px){
   .header-inner{padding:0 16px}
   .header-stats{display:none}
@@ -269,34 +292,6 @@ main { max-width:1440px; margin:0 auto; padding:32px 32px 64px; }
   main{padding:20px 16px 48px}
   .event-grid{grid-template-columns:1fr}
 }
-
-/* ═══ ADMIN VISIBILITY ═══ */
-.admin-only { display:none !important; }
-body.is-admin .admin-only { display:inline-flex !important; }
-.admin-badge { font-size:10px; font-weight:800; letter-spacing:1px; text-transform:uppercase; background:rgba(22,163,74,.15); color:#16a34a; border:1px solid rgba(22,163,74,.3); padding:4px 12px; border-radius:100px; }
-.login-overlay { position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:300; display:flex; align-items:center; justify-content:center; padding:24px; opacity:0; pointer-events:none; transition:opacity .2s; backdrop-filter:blur(3px); }
-.login-overlay.open { opacity:1; pointer-events:all; }
-.login-box { background:var(--white); border-radius:12px; width:100%; max-width:360px; padding:32px; box-shadow:0 24px 60px rgba(0,0,0,.2); position:relative; }
-.login-logo { display:flex; justify-content:center; margin-bottom:20px; }
-.login-logo img { height:28px; }
-.login-title { font-size:18px; font-weight:800; color:var(--black); text-align:center; margin-bottom:4px; }
-.login-sub { font-size:12px; color:var(--gray-400); text-align:center; margin-bottom:24px; }
-.login-label { font-size:10px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; color:var(--gray-600); margin-bottom:5px; display:block; }
-.login-input { width:100%; border:1.5px solid var(--gray-200); border-radius:7px; padding:10px 13px; font-size:13px; font-family:inherit; color:var(--black); outline:none; transition:border-color .2s; margin-bottom:14px; }
-.login-input:focus { border-color:var(--black); }
-.login-btn { width:100%; background:var(--black); border:none; color:var(--white); font-size:13px; font-weight:700; font-family:inherit; padding:11px; border-radius:7px; cursor:pointer; transition:background .2s; letter-spacing:.5px; }
-.login-btn:hover { background:#333; }
-.login-btn:disabled { background:var(--gray-300); cursor:not-allowed; }
-.login-err { font-size:12px; color:var(--red); margin-top:10px; text-align:center; min-height:18px; }
-.login-close { position:absolute; top:14px; right:14px; background:var(--gray-100); border:none; border-radius:6px; color:var(--gray-600); cursor:pointer; font-size:14px; padding:5px 9px; }
-.sync-dot { width:7px; height:7px; border-radius:50%; background:var(--gray-300); display:inline-block; margin-right:4px; transition:background .3s; }
-.sync-dot.syncing { background:#f59e0b; animation:blink .8s ease-in-out infinite; }
-.sync-dot.saved { background:#16a34a; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-.loading-wrap { display:none; padding:60px 24px; text-align:center; }
-.loading-wrap.show { display:block; }
-.spinner { display:inline-block; width:22px; height:22px; border:2px solid var(--gray-200); border-top-color:var(--black); border-radius:50%; animation:spin .7s linear infinite; }
-@keyframes spin { to { transform:rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -316,18 +311,18 @@ body.is-admin .admin-only { display:inline-flex !important; }
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         <input class="search" id="searchInput" placeholder="Cari event...">
       </div>
-      <button class="hbtn" onclick="exportCSV()">Export CSV</button>
+      <button class="hbtn admin-only" onclick="exportCSV()">Export CSV</button>
       <button class="hbtn hbtn-red admin-only" onclick="openCreateModal()">+ Tambah Event</button>
+      <button class="hbtn admin-only" onclick="confirmReset()">Reset</button>
       <span class="sync-dot" id="syncDot"></span>
       <span class="admin-badge" id="adminBadge" style="display:none">● Admin</span>
-      <button class="hbtn hbtn-red" id="btnLogin" onclick="openLoginModal()">🔐 Admin</button>
+      <button class="hbtn hbtn-red" id="btnLogin" onclick="openLoginModal()">🔒 Admin</button>
       <button class="hbtn" id="btnLogout" onclick="doLogout()" style="display:none">Logout</button>
     </div>
   </div>
   <div class="progress-strip"><div class="progress-fill" id="progressFill"></div></div>
 </header>
 
-<div class="loading-wrap" id="loadingWrap"><div class="spinner"></div><br><br><span style="font-size:12px;color:var(--gray-400)">Memuat data...</span></div>
 <div class="timeline-strip">
   <div class="timeline-inner" id="timelineStrip"></div>
 </div>
@@ -348,13 +343,13 @@ body.is-admin .admin-only { display:inline-flex !important; }
     <button class="fc" id="fg-Ignite" onclick="setFilter('g','Ignite',this)" style="color:var(--red);border-color:rgba(212,0,0,.3)">● Ignite</button>
     <button class="fc" id="fg-Connect" onclick="setFilter('g','Connect',this)">● Connect</button>
     <button class="fc" id="fg-none" onclick="setFilter('g','—',this)">Belum Ditandai</button>
-    <div class="filter-right" style="display:flex;align-items:center;gap:10px">
-      <div style="width:1px;height:20px;background:var(--gray-200);flex-shrink:0"></div>
+    <div class="filter-right">
+      <span class="count-text" id="countLabel"></span>
+      <div style="width:1px;height:20px;background:var(--gray-200);margin:0 6px;flex-shrink:0"></div>
       <div class="view-toggle">
         <button class="vbtn active" id="vCard" onclick="setView('card',this)">☰ Cards</button>
         <button class="vbtn" id="vTimeline" onclick="setView('timeline',this)">━ Timeline</button>
       </div>
-      <span class="count-text" id="countLabel"></span>
     </div>
   </div>
 </div>
@@ -389,12 +384,14 @@ body.is-admin .admin-only { display:inline-flex !important; }
       </div>
       <div class="mftr-r">
         <button class="mbtn mbtn-ghost" onclick="closeModal()">Tutup</button>
-        <button class="mbtn mbtn-edit" id="btnEdit" onclick="toggleEdit()" style="display:none">Edit</button>
+        <button class="mbtn mbtn-edit" id="btnEdit" onclick="toggleEdit()">Edit</button>
         <button class="mbtn mbtn-save" id="btnSave" onclick="saveEdit()" style="display:none">Simpan</button>
       </div>
     </div>
   </div>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <!-- LOGIN MODAL -->
 <div class="login-overlay" id="loginOverlay" onclick="handleLoginOverlayClick(event)">
@@ -411,12 +408,10 @@ body.is-admin .admin-only { display:inline-flex !important; }
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+
 
 <script>
-// ════════════════════════════════════════════════
-// DEFAULT DATA (fallback reference)
-// ════════════════════════════════════════════════
+// ═══════════════════════════ DATA ═══════════════════════════
 const DEFAULT = [
   // ─── Q1 ───
   {id:1,q:'Q1',month:'JAN',date:'2026-01-25',dateDisplay:'25',monthFull:'Januari',name:'BOP (Gacha Angpao)',category:'BOP',pic:'—',status:'Done',
@@ -621,27 +616,23 @@ const DEFAULT = [
     notes:'PIC: Jeshua. Undang keluarga. Dress code: formal.'}
 ];
 
+// ═══════════════════════════ STATE ═══════════════════════════
+const STORAGE_KEY = 'ignitex_special_2026_v7';
+let events = [], filterQ = 'ALL', filterS = 'all', filterG = 'ALL', searchQ = '', curEvent = null, isEditing = false, isCreating = false, currentView = 'card';
+let isAdmin = false, adminPass = sessionStorage.getItem('igx_pass') || '', lastHash = '';
 
-// ════════════════════════════════════════════════
-// STATE
-// ════════════════════════════════════════════════
-let events = [], filterQ = 'ALL', filterS = 'all', filterG = 'ALL', searchQ = '';
-let curEvent = null, isEditing = false, isCreating = false;
-let isAdmin = false, adminPass = sessionStorage.getItem('igx_pass') || '';
-let currentView = 'card';
-let lastHash = '';
-
-// ════════════════════════════════════════════════
-// CONSTANTS
-// ════════════════════════════════════════════════
 const QUARTER_LABELS = {Q1:'Januari — Maret',Q2:'April — Juni',Q3:'Juli — September',Q4:'Oktober — Desember'};
-const MONTHS_ORDER   = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'];
-const MONTHS_FULL    = {JAN:'Januari',FEB:'Februari',MAR:'Maret',APR:'April',MEI:'Mei',JUN:'Juni',JUL:'Juli',AGS:'Agustus',SEPT:'September',OKT:'Oktober',NOV:'November',DES:'Desember'};
-const CAT_CLASS      = {BOP:'bop','SPECIAL MONDAY':'','ROAD TO IDEASCAPE':'trip','LEADERS MEETING':'','TRIP':'trip','OUTING':'','CORE':'core','ROAD TO AAB':'','MAJOR EVENT':'major','SUMMIT':'summit','SPORT':''};
-const MONTH_OPTS     = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'];
-const MONTH_FULL_MAP = {JAN:'Januari',FEB:'Februari',MAR:'Maret',APR:'April',MEI:'Mei',JUN:'Juni',JUL:'Juli',AGS:'Agustus',SEPT:'September',OKT:'Oktober',NOV:'November',DES:'Desember'};
-const CAT_OPTS       = ['BOP','SPECIAL MONDAY','ROAD TO IDEASCAPE','LEADERS MEETING','TRIP','OUTING','CORE','ROAD TO AAB','MAJOR EVENT','SUMMIT','SPORT'];
+const MONTHS_ORDER = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'];
+const MONTHS_FULL = {JAN:'Januari',FEB:'Februari',MAR:'Maret',APR:'April',MEI:'Mei',JUN:'Juni',JUL:'Juli',AGS:'Agustus',SEPT:'September',OKT:'Oktober',NOV:'November',DES:'Desember'};
+const CAT_CLASS = {BOP:'bop','SPECIAL MONDAY':'','ROAD TO IDEASCAPE':'trip','LEADERS MEETING':'','TRIP':'trip','OUTING':'','CORE':'core','ROAD TO AAB':'','MAJOR EVENT':'major','SUMMIT':'summit','SPORT':''};
 
+function load() {
+  const s = localStorage.getItem(STORAGE_KEY);
+  events = s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT));
+  events.forEach(e => { if(!e.group) e.group = '—'; if(e.momentum===undefined) e.momentum = ''; });
+}
+function persist() { localStorage.setItem(STORAGE_KEY, JSON.stringify(events)); showToast('Tersimpan'); }
+function confirmReset() { if(confirm('Reset semua data ke default?')) { events = JSON.parse(JSON.stringify(DEFAULT)); localStorage.removeItem(STORAGE_KEY); render(); showToast('Data direset'); } }
 
 // ═══════════════════════════ VIEW TOGGLE ═══════════════════════════
 function setView(v, el) {
@@ -652,7 +643,7 @@ function setView(v, el) {
 }
 
 // ═══════════════════════════ TIMELINE ═══════════════════════════
-const TL_MW = 120;
+const TL_MW = 120; // px per month column
 const TL_MO = {JAN:0,FEB:120,MAR:240,APR:360,MEI:480,JUN:600,JUL:720,AGS:840,SEPT:960,OKT:1080,NOV:1200,DES:1320};
 const TL_MD = {JAN:31,FEB:28,MAR:31,APR:30,MEI:31,JUN:30,JUL:31,AGS:31,SEPT:30,OKT:31,NOV:30,DES:31};
 
@@ -661,18 +652,22 @@ function tlPx(e) {
   const day = e.date ? new Date(e.date + 'T00:00:00').getDate() : 1;
   return off + (day - 1) / (TL_MD[e.month] || 30) * TL_MW;
 }
+
 function tlWpx(e) {
   const m = (e.dateDisplay || '').match(/(\d+)[–\-](\d+)/);
   const dur = m ? Math.max(1, parseInt(m[2]) - parseInt(m[1]) + 1) : 1;
   return Math.max(106, dur / (TL_MD[e.month] || 30) * TL_MW);
 }
+
 function tlTodayPx() {
   const t = new Date();
   const ms = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'][t.getMonth()];
   return (TL_MO[ms] || 0) + (t.getDate() - 1) / (TL_MD[ms] || 30) * TL_MW;
 }
+
 function tlPackRows(evts) {
-  const GAP = 8, rows = [], ends = [];
+  const GAP = 8;
+  const rows = [], ends = [];
   evts.forEach(e => {
     const sx = tlPx(e), wx = tlWpx(e), ex = sx + wx + GAP;
     let r = ends.findIndex(end => sx >= end);
@@ -682,28 +677,33 @@ function tlPackRows(evts) {
   });
   return rows;
 }
-function getActiveMonth() {
-  return ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'][new Date().getMonth()];
-}
+
 function renderTimeline(f) {
   const el = document.getElementById('timelineContainer');
   const curM = getActiveMonth();
   const qcfg = [
-    {q:'Q1',months:['JAN','FEB','MAR']},
-    {q:'Q2',months:['APR','MEI','JUN']},
-    {q:'Q3',months:['JUL','AGS','SEPT']},
-    {q:'Q4',months:['OKT','NOV','DES']}
+    {q:'Q1', months:['JAN','FEB','MAR']},
+    {q:'Q2', months:['APR','MEI','JUN']},
+    {q:'Q3', months:['JUL','AGS','SEPT']},
+    {q:'Q4', months:['OKT','NOV','DES']}
   ];
-  const head = `<div class="tl-head">${qcfg.map(({q,months}) =>
+
+  const head = `<div class="tl-head">${qcfg.map(({q, months}) =>
     `<div class="tl-q-seg"><div class="tl-q-top">${q}</div><div class="tl-q-months">${
-      months.map(m => `<div class="tl-month-lbl${m===curM?' tl-cur':''}">${m}</div>`).join('')
+      months.map(m => `<div class="tl-month-lbl${m === curM ? ' tl-cur' : ''}">${m}</div>`).join('')
     }</div></div>`).join('')}</div>`;
+
+  // Vertical separator lines
   const seps =
-    [120,240,480,600,840,960,1200,1320].map(x=>`<div class="tl-msep" style="left:${x}px"></div>`).join('') +
-    [360,720,1080].map(x=>`<div class="tl-qsep" style="left:${x}px"></div>`).join('');
-  const todayEl = `<div class="tl-today" style="left:${tlTodayPx().toFixed(1)}px"></div>`;
-  const sorted = [...f].sort((a,b) => a.date.localeCompare(b.date));
+    [120,240,480,600,840,960,1200,1320].map(x => `<div class="tl-msep" style="left:${x}px"></div>`).join('') +
+    [360,720,1080].map(x => `<div class="tl-qsep" style="left:${x}px"></div>`).join('');
+
+  const todayX = tlTodayPx();
+  const todayEl = `<div class="tl-today" style="left:${todayX.toFixed(1)}px"></div>`;
+
+  const sorted = [...f].sort((a, b) => a.date.localeCompare(b.date));
   const rows = tlPackRows(sorted);
+
   const pills = rows.map(row =>
     `<div class="tl-row">${row.map(e => {
       let cls = `s-${e.status.toLowerCase()}`;
@@ -711,17 +711,21 @@ function renderTimeline(f) {
       if (e.category === 'SUMMIT') cls += ' c-summit';
       else if (e.category === 'MAJOR EVENT') cls += ' c-major';
       else if (e.category === 'TRIP') cls += ' c-trip';
-      const tip = `${e.name} — ${e.dateDisplay} ${e.monthFull} 2026 · ${e.category}`.replace(/"/g,'&quot;');
-      return `<div class="tl-ev ${cls}" style="left:${e.sx.toFixed(1)}px;width:${e.wx.toFixed(1)}px" onclick="openModal(${e.id})" title="${tip}">${e.dateDisplay} ${e.name}</div>`;
+      const tip = `${e.name} — ${e.dateDisplay} ${e.monthFull} 2026 · ${e.category}${e.pic !== '—' ? ' · ' + e.pic : ''}`.replace(/"/g, '&quot;');
+      const label = `${e.dateDisplay} ${e.name}`;
+      return `<div class="tl-ev ${cls}" style="left:${e.sx.toFixed(1)}px;width:${e.wx.toFixed(1)}px" onclick="openModal(${e.id})" title="${tip}">${label}</div>`;
     }).join('')}</div>`
   ).join('');
+
   const legend = `<div class="tl-legend">
     <div class="tl-lg-item"><div class="tl-lg-dot" style="background:rgba(212,0,0,.08);border-color:rgba(212,0,0,.2)"></div>Upcoming</div>
     <div class="tl-lg-item"><div class="tl-lg-dot" style="background:var(--gray-100);border-color:var(--gray-200)"></div>Done</div>
     <div class="tl-lg-item"><div class="tl-lg-dot" style="background:rgba(212,0,0,.12);border-color:rgba(212,0,0,.3)"></div>Trip</div>
     <div class="tl-lg-item"><div class="tl-lg-dot" style="background:var(--black);border-color:var(--black)"></div>Summit / Major</div>
-    <div class="tl-lg-item" style="margin-left:auto;color:var(--red);font-size:9px">▎ Garis merah = hari ini &nbsp;·&nbsp; Klik event untuk edit</div>
+    <div class="tl-lg-item"><div class="tl-lg-dot" style="background:rgba(10,10,10,.06);border-color:rgba(10,10,10,.15)"></div>Connect</div>
+    <div class="tl-lg-item" style="margin-left:auto;color:var(--red)">▎ Garis merah = hari ini &nbsp;·&nbsp; Klik event untuk edit</div>
   </div>`;
+
   el.innerHTML = `<div class="tl-outer"><div class="tl-track">${head}<div class="tl-body">${seps}${todayEl}${pills}</div></div>${legend}</div>`;
 }
 
@@ -786,6 +790,7 @@ function render() {
     renderTimeline(f);
     return;
   }
+
   container.style.display = '';
   tlContainer.style.display = 'none';
   if(!f.length) { container.innerHTML=''; empty.style.display='block'; return; }
@@ -898,11 +903,11 @@ function closeModal() {
   document.body.style.overflow = '';
   curEvent = null; isEditing = false; isCreating = false;
 }
-async function deleteEvent() {
+function deleteEvent() {
   if(!curEvent) return;
   if(!confirm(`Hapus event "${curEvent.name}"? Tindakan ini tidak bisa dibatalkan.`)) return;
   events = events.filter(e=>e.id!==curEvent.id);
-  await saveEvents(); closeModal(); render();
+  persist(); closeModal(); render();
   showToast('Event dihapus');
 }
 function handleOverlayClick(ev) { if(ev.target===document.getElementById('overlay')) closeModal(); }
@@ -933,8 +938,8 @@ function buildModal() {
     <span class="mtag">${e.q}</span>
     <span class="gbadge ${groupBadgeClass(grp)}" style="font-size:10px;padding:4px 12px">${grp==='—'?'Belum Ditandai':grp}</span>`;
   document.getElementById('btnMarkDone').style.display = (isAdmin && e.status==='Upcoming') ? 'inline-flex' : 'none';
-  document.getElementById('btnDelete').style.display   = isAdmin ? 'inline-flex' : 'none';
-  document.getElementById('btnEdit').style.display     = isAdmin ? 'inline-flex' : 'none';
+  document.getElementById('btnDelete').style.display = isAdmin ? 'inline-flex' : 'none';
+  document.getElementById('btnEdit').style.display = isAdmin ? 'inline-flex' : 'none';
   document.getElementById('btnEdit').textContent = isEditing ? 'Batal' : 'Edit';
   document.getElementById('btnSave').style.display = (isAdmin && isEditing) ? 'inline-flex' : 'none';
   document.getElementById('btnSave').textContent = 'Simpan';
@@ -944,8 +949,8 @@ function buildModal() {
 function buildViewBody() {
   const e = curEvent;
   const grp = e.group || '—';
-
-  // Group row: dropdown for admin, read-only badge for viewer
+  const gbc = groupBadgeClass(grp);
+  const gLabel = grp === '—' ? 'Belum Ditandai' : grp;
   const groupRow = isAdmin
     ? `<div class="group-assign">
         <span class="group-assign-label">Kelompok Acara</span>
@@ -955,18 +960,16 @@ function buildViewBody() {
           <option value="Connect"${grp==='Connect'?' selected':''}>⚫ Connect</option>
         </select>
       </div>`
-    : (grp !== '—' ? `<div style="margin-bottom:14px"><span class="gbadge ${groupBadgeClass(grp)}" style="font-size:11px;padding:5px 14px">${grp}</span></div>` : '');
-
-  // Momentum: editable for admin, read-only text for viewer
+    : `<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+        <span style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-400)">Kelompok:</span>
+        <span class="gbadge ${gbc}">${gLabel}</span>
+      </div>`;
   const momentumRow = isAdmin
     ? `<div class="m-sec">Momentum Pengumuman</div>
        <textarea class="momentum-ta" id="momentumInput" placeholder="Tulis momentum / pengumuman penting untuk event ini..." onblur="saveMomentum(this.value)">${e.momentum||''}</textarea>
        <div class="momentum-hint">Teks ini langsung tampil di card depan saat diisi. Klik di luar kotak untuk menyimpan.</div>`
-    : (e.momentum ? `<div class="m-sec">Momentum Pengumuman</div><div class="m-note" style="margin-bottom:18px">📢 ${e.momentum}</div>` : '');
-
-  document.getElementById('mBody').innerHTML = `
-    ${groupRow}
-    ${momentumRow}
+    : (e.momentum ? `<div class="ecard-momentum">📢 ${e.momentum}</div>` : '');
+  document.getElementById('mBody').innerHTML = groupRow + momentumRow + `
     <div class="m-sec">Deskripsi</div>
     <div class="m-desc">${e.desc}</div>
     <div class="m-sec">Agenda</div>
@@ -1011,17 +1014,21 @@ function buildEditForm() {
     <textarea class="ef ef-ta" id="eMomentum" rows="2" placeholder="Tulis momentum / pengumuman penting...">${e.momentum||''}</textarea>`;
 }
 
-async function saveMomentum(val) {
+function saveMomentum(val) {
   const i = events.findIndex(e=>e.id===curEvent.id);
   events[i].momentum = val.trim(); curEvent = events[i];
-  await saveEvents(); render();
+  persist(); render();
 }
 
-async function setGroup(val) {
+function setGroup(val) {
   const i = events.findIndex(e=>e.id===curEvent.id);
   events[i].group = val; curEvent = events[i];
-  await saveEvents(); buildModal(); render();
+  persist(); buildModal(); render();
 }
+
+const MONTH_OPTS = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEPT','OKT','NOV','DES'];
+const MONTH_FULL_MAP = {JAN:'Januari',FEB:'Februari',MAR:'Maret',APR:'April',MEI:'Mei',JUN:'Juni',JUL:'Juli',AGS:'Agustus',SEPT:'September',OKT:'Oktober',NOV:'November',DES:'Desember'};
+const CAT_OPTS = ['BOP','SPECIAL MONDAY','ROAD TO IDEASCAPE','LEADERS MEETING','TRIP','OUTING','CORE','ROAD TO AAB','MAJOR EVENT','SUMMIT','SPORT'];
 
 function dateToMeta(dateStr) {
   if(!dateStr) return {q:'Q1',month:'JAN',dateDisplay:'',monthFull:'Januari'};
@@ -1088,7 +1095,7 @@ function buildCreateForm() {
     <textarea class="ef ef-ta" id="eNotes" rows="2" placeholder="Catatan tambahan..."></textarea>`;
 }
 
-async function saveNewEvent() {
+function saveNewEvent() {
   const name = document.getElementById('eName').value.trim();
   const dateVal = document.getElementById('eDate').value;
   if(!name) { showToast('Nama event wajib diisi'); return; }
@@ -1113,17 +1120,17 @@ async function saveNewEvent() {
     notes: document.getElementById('eNotes').value.trim()
   };
   events.push(newEvent);
-  await saveEvents(); closeModal(); render();
+  persist(); closeModal(); render();
   showToast('Event berhasil dibuat');
 }
 
 function toggleEdit() { isEditing = !isEditing; buildModal(); }
-async function markDone() {
+function markDone() {
   const i = events.findIndex(e=>e.id===curEvent.id);
   events[i].status = 'Done'; curEvent = events[i];
-  await saveEvents(); buildModal(); render();
+  persist(); buildModal(); render();
 }
-async function saveEdit() {
+function saveEdit() {
   if(isCreating) { saveNewEvent(); return; }
   const i = events.findIndex(e=>e.id===curEvent.id);
   events[i].name = document.getElementById('eName').value.trim();
@@ -1148,7 +1155,7 @@ async function saveEdit() {
   events[i].notes = document.getElementById('eNotes').value.trim();
   events[i].momentum = document.getElementById('eMomentum').value.trim();
   curEvent = events[i]; isEditing = false;
-  await saveEvents(); buildModal(); render();
+  persist(); buildModal(); render();
 }
 
 // ═══════════════════════════ EXPORT ═══════════════════════════
@@ -1167,152 +1174,17 @@ function showToast(msg) {
   clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove('show'),2000);
 }
 
-// ═══════════════════════════ KEYS & EVENTS ═══════════════════════════
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
-document.getElementById('searchInput').addEventListener('input', e => { searchQ = e.target.value; render(); });
 
-
-
-// ════════════════════════════════════════════════
-// INIT
-// ════════════════════════════════════════════════
-window.addEventListener('DOMContentLoaded', async () => {
-  await loadEvents();
-  if (adminPass) tryRestoreSession();
-  startPolling();
-});
-
-// ════════════════════════════════════════════════
-// DATA / API
-// ════════════════════════════════════════════════
-async function loadEvents() {
-  setSyncDot('syncing');
-  document.getElementById('loadingWrap').classList.add('show');
-  try {
-    const res = await fetch('/api/events?t=' + Date.now());
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    if (Array.isArray(data) && data.length > 0) {
-      events = data;
-      events.forEach(e => { if(!e.group) e.group='—'; if(e.momentum===undefined) e.momentum=''; });
-    } else {
-      // API returned empty — fallback to DEFAULT
-      events = JSON.parse(JSON.stringify(DEFAULT));
-      events.forEach(e => { e.group='—'; e.momentum=''; });
-    }
-  } catch(err) {
-    console.error('loadEvents error:', err);
-    // Network/parse error — fallback to DEFAULT so page is never blank
-    events = JSON.parse(JSON.stringify(DEFAULT));
-    events.forEach(e => { e.group='—'; e.momentum=''; });
-    showToast('Mode offline — menampilkan data default');
-  }
-  applyAutoDone(events);
-  lastHash = quickHash();
-  render();
-  document.getElementById('loadingWrap').classList.remove('show');
-  document.getElementById('loadingWrap').style.display = 'none';
-  setSyncDot('saved');
-}
-
-async function saveEvents() {
-  setSyncDot('syncing');
-  try {
-    const res = await fetch('/api/events', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-Admin-Password': adminPass },
-      body: JSON.stringify(events)
-    });
-    if (res.status === 401) { doLogout(); showToast('Session habis — silakan login lagi'); return false; }
-    if (!res.ok) { const e = await res.json().catch(()=>({error:'Unknown'})); showToast('Error: ' + e.error); setSyncDot(''); return false; }
-    lastHash = quickHash();
-    showToast('Tersimpan ✓');
-    setSyncDot('saved');
-    return true;
-  } catch(_) { showToast('Gagal menyimpan'); setSyncDot(''); return false; }
-}
-
-// Tanggal terakhir event — untuk event multi-hari (mis. dateDisplay '17–18')
-// pakai hari terakhir agar tidak dianggap selesai saat acara masih berlangsung.
-function eventEndDate(e) {
-  if (!e.date) return null;
-  const base = new Date(e.date + 'T00:00:00');
-  if (e.dateDisplay && /[–-]/.test(e.dateDisplay)) {
-    const parts = e.dateDisplay.split(/[–-]/).map(s => parseInt(s.trim(), 10));
-    const endDay = parts[parts.length - 1];
-    if (!isNaN(endDay)) base.setDate(endDay);
-  }
-  return base;
-}
-
-// Auto-done: event yang tanggalnya sudah lewat dan masih 'Upcoming'
-// otomatis ditandai 'Done'. Status 'Cancelled' tidak diubah.
-function applyAutoDone(list) {
-  const today = new Date(); today.setHours(0, 0, 0, 0);
-  list.forEach(e => {
-    if (e.status === 'Upcoming') {
-      const end = eventEndDate(e);
-      if (end && end < today) e.status = 'Done';
-    }
-  });
-}
-
-function quickHash() {
-  return events.map(e => e.id+e.status+(e.momentum||'')+(e.group||'')+(e.name||'')).join('|');
-}
-
-// ════════════════════════════════════════════════
-// REALTIME POLLING (10s)
-// ════════════════════════════════════════════════
-function startPolling() {
-  setInterval(async () => {
-    if (document.hidden || isEditing || isCreating) return;
-    try {
-      const res = await fetch('/api/events?t=' + Date.now());
-      if (!res.ok) return;
-      const data = await res.json();
-      if (!Array.isArray(data)) return;
-      data.forEach(e => { if(!e.group) e.group='—'; if(e.momentum===undefined) e.momentum=''; });
-      applyAutoDone(data);
-      const newHash = data.map(e => e.id+e.status+(e.momentum||'')+(e.group||'')+(e.name||'')).join('|');
-      if (newHash === lastHash) return;
-      events = data;
-      lastHash = newHash;
-      render();
-      if (curEvent && !isEditing) {
-        const upd = events.find(e => e.id === curEvent.id);
-        if (upd) { curEvent = upd; buildModal(); }
-      }
-    } catch(_) {}
-  }, 10000);
-}
-
-// ════════════════════════════════════════════════
-// AUTH
-// ════════════════════════════════════════════════
-async function tryRestoreSession() {
-  // Silent verify: try a write with stored pass
-  try {
-    const res = await fetch('/api/events', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-Admin-Password': adminPass },
-      body: JSON.stringify(events)
-    });
-    if (res.ok) { activateAdmin(false); lastHash = quickHash(); }
-    else { adminPass = ''; sessionStorage.removeItem('igx_pass'); }
-  } catch(_) {}
-}
-
+// ═══════════════════════════ ADMIN AUTH ═══════════════════════════
 function activateAdmin(notify = true) {
   isAdmin = true;
   document.body.classList.add('is-admin');
   document.getElementById('btnLogin').style.display   = 'none';
   document.getElementById('btnLogout').style.display  = 'inline-flex';
   document.getElementById('adminBadge').style.display = 'inline-flex';
-  if (notify) showToast('✓ Login berhasil — mode Admin aktif');
+  if (notify) showToast('✔ Login berhasil — mode Admin aktif');
   render();
 }
-
 function doLogout() {
   isAdmin = false; adminPass = '';
   sessionStorage.removeItem('igx_pass');
@@ -1321,10 +1193,9 @@ function doLogout() {
   document.getElementById('btnLogout').style.display  = 'none';
   document.getElementById('adminBadge').style.display = 'none';
   if (isEditing || isCreating) closeModal();
-  showToast('✓ Logged out');
+  showToast('✔ Logged out');
   render();
 }
-
 async function doLogin() {
   const pass = document.getElementById('loginPassword').value.trim();
   const btn  = document.getElementById('btnLoginSubmit');
@@ -1345,10 +1216,8 @@ async function doLogin() {
     sessionStorage.setItem('igx_pass', pass);
     closeLoginModal();
     activateAdmin(true);
-    lastHash = quickHash();
   } catch(_) { btn.disabled = false; btn.textContent = 'Login'; err.textContent = 'Koneksi error'; }
 }
-
 function openLoginModal() {
   document.getElementById('loginOverlay').classList.add('open');
   document.getElementById('loginPassword').value = '';
@@ -1358,17 +1227,26 @@ function openLoginModal() {
 function closeLoginModal() { document.getElementById('loginOverlay').classList.remove('open'); }
 function handleLoginOverlayClick(e) { if (e.target === document.getElementById('loginOverlay')) closeLoginModal(); }
 
-// ════════════════════════════════════════════════
-// SYNC DOT
-// ════════════════════════════════════════════════
-function setSyncDot(state) {
-  const dot = document.getElementById('syncDot');
-  if (!dot) return;
-  dot.className = 'sync-dot' + (state ? ' ' + state : '');
-  if (state === 'saved') setTimeout(() => { if(dot.classList.contains('saved')) dot.className='sync-dot'; }, 3000);
-}
+// ═══════════════════════════ KEYS & EVENTS ═══════════════════════════
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+document.getElementById('searchInput').addEventListener('input', e => { searchQ = e.target.value; render(); });
 
-
+// ═══════════════════════════ INIT ═══════════════════════════
+load(); render();
+// Restore admin session if password saved
+(async () => {
+  const saved = sessionStorage.getItem('igx_pass');
+  if (!saved) return;
+  try {
+    const res = await fetch('/api/events', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Password': saved },
+      body: JSON.stringify(events)
+    });
+    if (res.ok) { adminPass = saved; activateAdmin(false); }
+    else sessionStorage.removeItem('igx_pass');
+  } catch(_) {}
+})();
 </script>
 </body>
 </html>
