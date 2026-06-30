@@ -929,5 +929,23 @@
     "agenda": [],
     "tujuan": [],
     "notes": ""
+  },
+  {
+    "id": 39,
+    "q": "Q3",
+    "month": "JUL",
+    "monthFull": "Juli",
+    "date": "2026-07-11",
+    "dateDisplay": "11",
+    "name": "Meeting Leader",
+    "category": "LEADERS MEETING",
+    "pic": "Alfred",
+    "group": "—",
+    "status": "Upcoming",
+    "momentum": "",
+    "desc": "",
+    "agenda": [],
+    "tujuan": [],
+    "notes": ""
   }
 ]
